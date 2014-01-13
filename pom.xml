@@ -11,6 +11,9 @@
     <modules>
         <module>ic-logger</module>
         <module>heap</module>
+        <module>unsafe</module>
+        <module>proxy</module>
+        <module>service-loader</module>
     </modules>
 
     <dependencyManagement>
@@ -29,6 +32,12 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>1.0.13</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
