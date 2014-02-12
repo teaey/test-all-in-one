@@ -16,6 +16,7 @@
         <module>service-loader</module>
         <module>protobuf</module>
         <module>socket</module>
+        <module>netty</module>
     </modules>
 
     <dependencyManagement>

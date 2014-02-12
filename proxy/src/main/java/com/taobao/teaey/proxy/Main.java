@@ -15,10 +15,8 @@ public class Main {
     }
 
     static class TestInvocationHandler implements InvocationHandler {
-        static int i = 0;
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            i++;
             return null;
         }
     }
@@ -66,14 +64,14 @@ public class Main {
 
         long t1 = System.nanoTime();
         for (int i = 0; i < round; i++) {
-            ti2.test();
+            ti1.test();
         }
         long t2 = System.nanoTime();
         System.out.println(TimeUnit.NANOSECONDS.toMillis(t2 - t1));
 
         long t3 = System.nanoTime();
         for (int i = 0; i < round; i++) {
-            ti1.test();
+            ti2.test();
         }
         long t4 = System.nanoTime();
         System.out.println(TimeUnit.NANOSECONDS.toMillis(t4 - t3));
