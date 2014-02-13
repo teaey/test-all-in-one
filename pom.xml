@@ -17,6 +17,7 @@
         <module>protobuf</module>
         <module>socket</module>
         <module>netty</module>
+        <module>lost-rpc</module>
     </modules>
 
     <dependencyManagement>

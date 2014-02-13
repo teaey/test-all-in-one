@@ -1,6 +1,7 @@
 package com.taobao.teaey.protobuf.service;
 
 import com.google.protobuf.*;
+import com.taobao.teaey.protobuf.PbDemoProto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +14,7 @@ public class PbRpcChannel implements RpcChannel, BlockingRpcChannel {
     @Override
     public void callMethod(Descriptors.MethodDescriptor method, RpcController controller, Message request, Message responsePrototype, RpcCallback<Message> done) {
         log.debug("---> callMethod sName={}, sIndex={}, mName={}, mIndex={}", method.getService().getFullName(), method.getService().getIndex(), method.getFullName(), method.getIndex());
+        done.run(PbDemoProto.Login_S2C.getDefaultInstance());
     }
 
     @Override

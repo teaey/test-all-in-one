@@ -1,9 +1,13 @@
-package com.taobao.teaey.protobuf;
+package com.taobao.teaey.lostrpc;
 
-option java_outer_classname = "PbDemoProto";
+option java_outer_classname = "LostProto";
 
 option optimize_for = SPEED;
 option java_generic_services = true;
+
+message Packet {
+    required int64 id = 1;
+}
 
 message MsgFields {
 

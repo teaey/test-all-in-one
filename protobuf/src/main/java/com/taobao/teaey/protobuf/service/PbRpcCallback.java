@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by xiaofei.wxf on 14-2-12.
  */
-public class PbRpcCallback implements RpcCallback {
+public class PbRpcCallback<T> implements RpcCallback<T> {
     private static final Logger log = LoggerFactory.getLogger(PbRpcCallback.class);
 
     @Override
-    public void run(Object parameter) {
+    public void run(T parameter) {
         log.debug("<--- mName=login, request={}", parameter);
     }
 }
