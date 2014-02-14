@@ -19,22 +19,26 @@ public class NettyServer implements Server {
     private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private final ServerBootstrap b = newServerBootStrap();
-    private SocketAddress address;
+    private SocketAddress addr;
 
     private ChannelInitializer initializer;
 
-    public NettyServer(ChannelInitializer initializer) {
+    public NettyServer initializer(ChannelInitializer initializer) {
         this.initializer = initializer;
+        return this;
     }
 
     @Override
     public Server run() {
-        if (null == address) {
-            throw new NullPointerException("socket address");
+        if (null == addr) {
+            throw new NullPointerException("socket addr");
+        }
+        if(null == initializer){
+            throw new NullPointerException("channel initializer");
         }
         b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(this.initializer);
         try {
-            ChannelFuture f = b.bind(address).sync();
+            ChannelFuture f = b.bind(addr).sync();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -52,13 +56,13 @@ public class NettyServer implements Server {
 
     @Override
     public Server bind(int port) {
-        this.address = new InetSocketAddress(port);
+        this.addr = new InetSocketAddress(port);
         return this;
     }
 
     @Override
     public Server bind(SocketAddress address) {
-        this.address = address;
+        this.addr = address;
         return this;
     }
 

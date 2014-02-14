@@ -1,5 +1,6 @@
 package com.taobao.teaey.lostrpc.server;
 
+import com.taobao.teaey.lostrpc.Dispatcher;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -12,10 +13,15 @@ import org.slf4j.LoggerFactory;
 @ChannelHandler.Sharable
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(NettyServerHandler.class);
+    private final Dispatcher dispatcher;
+
+    public NettyServerHandler(Dispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ctx.writeAndFlush(msg);
+        dispatcher.dispatcher(ctx.channel(), msg);
     }
 
     @Override

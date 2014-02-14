@@ -16,7 +16,7 @@ public class KryoCodec implements Codec {
     }
 
     public static final KryoCodec INSTANCE = new KryoCodec();
-    private static final ThreadLocal<Kryo> kryos = new ThreadLocal<Kryo>() {
+    private static final ThreadLocal<Kryo> KRYO_CACHE = new ThreadLocal<Kryo>() {
         protected Kryo initialValue() {
             Kryo kryo = new Kryo();
             kryo.setRegistrationRequired(false);
@@ -26,7 +26,7 @@ public class KryoCodec implements Codec {
     };
 
     private Kryo getKryo() {
-        return kryos.get();
+        return KRYO_CACHE.get();
     }
 
 

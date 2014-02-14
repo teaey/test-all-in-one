@@ -187,7 +187,7 @@ public class TightLoggingHandler extends ChannelDuplexHandler {
      * Returns a String which contains all details to log the {@link Object}
      */
     protected String formatNonByteBuf(String eventName, Object msg) {
-        return eventName + ": " + msg;
+        return eventName + ":\n" + msg;
     }
 
     /**

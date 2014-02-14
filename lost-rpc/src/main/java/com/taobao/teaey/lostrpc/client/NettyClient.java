@@ -12,14 +12,14 @@ import java.net.SocketAddress;
 /**
  * Created by xiaofei.wxf on 14-2-13.
  */
-public class NettyClient<A,B> implements Client<A, B> {
+public class NettyClient<A, B> implements Client<A, B> {
     private final Bootstrap b = newBootstrap();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
-    private SocketAddress socketAddress;
+    private SocketAddress addr;
     private ChannelInitializer initializer;
     private Channel channel;
 
-    private Dispatcher<B> dispatcher;
+    private Dispatcher<Channel, B> dispatcher;
 
     public NettyClient() {
     }
@@ -36,8 +36,14 @@ public class NettyClient<A,B> implements Client<A, B> {
 
     @Override
     public Client run() {
+        if (null == addr) {
+            throw new NullPointerException("socket address");
+        }
+        if(null == initializer){
+            throw new NullPointerException("channel initializer");
+        }
         try {
-            this.channel = b.group(workerGroup).channel(NioSocketChannel.class).handler(this.initializer).connect(socketAddress).sync().channel();
+            this.channel = b.group(workerGroup).channel(NioSocketChannel.class).handler(this.initializer).connect(addr).sync().channel();
         } catch (InterruptedException e) {
             shutdown();
         }
@@ -51,7 +57,7 @@ public class NettyClient<A,B> implements Client<A, B> {
 
     @Override
     public Client connect(InetSocketAddress address) {
-        this.socketAddress = address;
+        this.addr = address;
         return this;
     }
 
@@ -68,7 +74,7 @@ public class NettyClient<A,B> implements Client<A, B> {
 
     @Override
     public Client recv(B p) {
-        this.dispatcher.dispatcher(p);
+        this.dispatcher.dispatcher(this.channel, p);
         return this;
     }
 

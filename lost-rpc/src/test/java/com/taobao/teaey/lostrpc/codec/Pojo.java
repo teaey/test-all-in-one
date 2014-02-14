@@ -6,6 +6,10 @@ import java.util.Date;
  * Created by xiaofei.wxf on 14-2-14.
  */
 public class Pojo {
+    @Override
+    public int hashCode() {
+        return 12323243;
+    }
 
     private Date privateField = new Date();
     //private int i;

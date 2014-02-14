@@ -39,9 +39,9 @@
             <version>3.18.0-GA</version>
         </dependency>
         <dependency>
-            <groupId>hessian</groupId>
+            <groupId>com.caucho</groupId>
             <artifactId>hessian</artifactId>
-            <version>3.0.14.bugfix</version>
+            <version>4.0.7</version>
         </dependency>
         <dependency>
             <groupId>com.esotericsoftware.kryo</groupId>

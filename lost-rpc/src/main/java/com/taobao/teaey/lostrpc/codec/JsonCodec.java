@@ -1,14 +1,15 @@
 package com.taobao.teaey.lostrpc.codec;
 
 /**
+ * 目前使用Fastjson进行json序列化和反序列化
  * Created by xiaofei.wxf on 14-2-14.
  */
-public class FastJsonCodec implements Codec {
+public class JsonCodec implements Codec {
     public static final String NULL = "null";
     public static final byte[] NULL_BYTES = "null".getBytes(DEFAULT_CHARSET);
-    public static final FastJsonCodec INSTANCE = new FastJsonCodec();
+    public static final JsonCodec INSTANCE = new JsonCodec();
 
-    private FastJsonCodec() {
+    private JsonCodec() {
     }
 
     @Override
@@ -17,7 +18,7 @@ public class FastJsonCodec implements Codec {
     }
 
     /**
-     * 只会对public字段进行编码
+     * 默认只会对public字段进行编码
      * @param obj
      * @return
      * @throws Exception
