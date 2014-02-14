@@ -1,6 +1,6 @@
 package com.taobao.teaey.lostrpc.server;
 
-import com.taobao.teaey.lostrpc.NettyProtobufInitializer;
+import com.taobao.teaey.lostrpc.NettyChannelInitializer;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class ServerTest {
     public static void main(String[] args) throws IOException, InterruptedException {
-        new NettyServer(new NettyProtobufInitializer(new NettyServerHandler())).bind(8888).run();
+        new NettyServer(new NettyChannelInitializer.ProtobufInitializer(new NettyServerHandler())).bind(8888).run();
     }
 }
 

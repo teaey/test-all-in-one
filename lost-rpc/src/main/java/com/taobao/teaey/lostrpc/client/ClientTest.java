@@ -2,7 +2,7 @@ package com.taobao.teaey.lostrpc.client;
 
 import com.taobao.teaey.lostrpc.Dispatcher;
 import com.taobao.teaey.lostrpc.LostProto;
-import com.taobao.teaey.lostrpc.NettyProtobufInitializer;
+import com.taobao.teaey.lostrpc.NettyChannelInitializer;
 
 import java.net.InetSocketAddress;
 
@@ -12,7 +12,7 @@ import java.net.InetSocketAddress;
 public class ClientTest {
     public static void main(String[] args) {
         NettyClient client = new NettyClient();
-        client.initializer(new NettyProtobufInitializer(new NettyClientHandler(client))).dispatcher(new Dispatcher<LostProto.Packet>() {
+        client.initializer(new NettyChannelInitializer.ProtobufInitializer(new NettyClientHandler(client))).dispatcher(new Dispatcher<LostProto.Packet>() {
             @Override
             public void dispatcher(LostProto.Packet p) {
                 System.out.println(p);
