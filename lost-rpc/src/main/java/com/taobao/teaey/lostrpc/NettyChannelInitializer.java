@@ -105,8 +105,8 @@ public abstract class NettyChannelInitializer extends ChannelInitializer {
     /**
      * PROTOCOL BUFFERS *
      */
-    public static NettyChannelInitializer newProtobufInitializer(ChannelHandler... handler) {
-        return new ProtobufInitializer(handler);
+    public static NettyChannelInitializer newProtobufInitializer(MessageLite prototype, ChannelHandler... handler) {
+        return new ProtobufInitializer(prototype, handler);
     }
 
     public static final class ProtobufInitializer extends NettyChannelInitializer {
@@ -193,19 +193,29 @@ public abstract class NettyChannelInitializer extends ChannelInitializer {
             }
         }
 
+        private final MessageLite defaultIns;
+
         private final ChannelHandler encoder = new Encoder();
 
-        private ProtobufInitializer(ChannelHandler[] handlers) {
+        private ProtobufInitializer(MessageLite prototype, ChannelHandler[] handlers) {
             super(handlers);
+            if(null == prototype){
+                throw new NullPointerException("prototype");
+            }
+            this.defaultIns = prototype;
         }
 
-        private ProtobufInitializer(ChannelHandler handler) {
+        private ProtobufInitializer(MessageLite prototype, ChannelHandler handler) {
             super(handler);
+            if(null == prototype){
+                throw new NullPointerException("prototype");
+            }
+            this.defaultIns = prototype;
         }
 
         @Override
         protected void decoders(Channel ch) throws Exception {
-            ch.pipeline().addLast("decoder", new Decoder(LostProto.Packet.getDefaultInstance()));
+            ch.pipeline().addLast("decoder", new Decoder(this.defaultIns));
         }
 
         @Override

@@ -14,7 +14,7 @@ import java.io.IOException;
 public class ServerTest {
     @Test
     public void protobufServer() throws IOException, InterruptedException {
-        NettyChannelInitializer initializer = NettyChannelInitializer.newProtobufInitializer(new NettyServerHandler(new Dispatcher<Channel, LostProto.Packet>() {
+        NettyChannelInitializer initializer = NettyChannelInitializer.newProtobufInitializer(LostProto.Packet.getDefaultInstance(),new NettyServerHandler(new Dispatcher<Channel, LostProto.Packet>() {
             @Override
             public void dispatcher(Channel o, LostProto.Packet p) {
                 o.writeAndFlush(p);

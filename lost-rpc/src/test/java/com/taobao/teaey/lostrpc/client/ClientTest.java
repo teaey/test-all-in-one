@@ -17,7 +17,7 @@ public class ClientTest {
     @Test
     public void protobufClient() throws InterruptedException {
         NettyClient client = new NettyClient();
-        ChannelInitializer initializer = NettyChannelInitializer.newProtobufInitializer(new NettyClientHandler(client));
+        ChannelInitializer initializer = NettyChannelInitializer.newProtobufInitializer(LostProto.Packet.getDefaultInstance(), new NettyClientHandler(client));
         client.initializer(initializer).dispatcher(new Dispatcher<Channel, LostProto.Packet>() {
             @Override
             public void dispatcher(Channel channel, LostProto.Packet p) {

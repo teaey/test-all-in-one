@@ -2,11 +2,11 @@ package com.taobao.teaey.lostrpc;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
-/**
- * Created by xiaofei.wxf on 14-2-13.
- */
+
 public class Test {
+
     public static void main(String[] args) throws InvalidProtocolBufferException, InterruptedException {
+        System.out.println("来自服务器的响应:");
 //        LostProto.Login_C2S.Builder b = LostProto.Login_C2S.newBuilder();
 //        b.setTimestamp(System.nanoTime());
 //        System.out.println(b.build());
