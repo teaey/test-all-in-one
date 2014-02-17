@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 3.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+    <bean id="loginServiceImpl" class="com.taobao.teaey.lostrpc.hsf.LoginServiceImpl"/>
+    <bean id="loginServiceProvider" class="com.taobao.hsf.app.spring.util.HSFSpringProviderBean" init-method="init">
+        <property name="serviceInterface" value="com.taobao.teaey.lostrpc.hsf.LoginService"/>
+        <property name="serviceVersion" value="1.2.1.kongzheng.standlone"/>
+        <property name="serviceGroup" value="KZ.Group"/>
+        <property name="serviceName" value="LoginService"/>
+        <property name="clientTimeout" value="10000"/>
+        <property name="target" ref="loginServiceImpl"/>
+    </bean>
+</beans>

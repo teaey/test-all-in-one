@@ -7,7 +7,7 @@ import java.net.InetSocketAddress;
 /**
  * Created by xiaofei.wxf on 14-2-13.
  */
-public interface Client<A, B> {
+public interface Client<ReqType, RespType, Channel> {
 
     Client run();
 
@@ -17,9 +17,7 @@ public interface Client<A, B> {
 
     Client showdownNow();
 
-    Client send(A p);
-
-    Client recv(B p);
+    Client send(ReqType p);
 
     Client dispatcher(Dispatcher dispatcher);
 

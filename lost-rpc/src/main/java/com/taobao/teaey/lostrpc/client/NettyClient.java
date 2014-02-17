@@ -3,7 +3,9 @@ package com.taobao.teaey.lostrpc.client;
 import com.taobao.teaey.lostrpc.Dispatcher;
 import com.taobao.teaey.lostrpc.NettyChannelInitializer;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
@@ -13,26 +15,35 @@ import java.net.SocketAddress;
 /**
  * Created by xiaofei.wxf on 14-2-13.
  */
-public class NettyClient<A, B> implements Client<A, B> {
+public class NettyClient<ReqType, RespType> implements Client<ReqType, RespType, Channel> {
     private final Bootstrap b = newBootstrap();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private SocketAddress addr;
     private NettyChannelInitializer initializer;
     private Channel channel;
 
-    private Dispatcher<Channel, B> dispatcher;
+    private Dispatcher<Channel, RespType> dispatcher;
 
-    public NettyClient() {
+    private NettyClient() {
+    }
+
+    public static NettyClient newInstance() {
+        return new NettyClient();
     }
 
     public Client initializer(NettyChannelInitializer initializer) {
         this.initializer = initializer;
-        this.initializer.client(this);
+        if (null != this.dispatcher) {
+            this.initializer.dispatchHandler(this.dispatcher);
+        }
         return this;
     }
 
     public Client dispatcher(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
+        if (this.initializer != null) {
+            this.initializer.dispatchHandler(this.dispatcher);
+        }
         return this;
     }
 
@@ -70,14 +81,8 @@ public class NettyClient<A, B> implements Client<A, B> {
     }
 
     @Override
-    public Client send(A p) {
+    public Client send(ReqType p) {
         this.channel.writeAndFlush(p);
-        return this;
-    }
-
-    @Override
-    public Client recv(B p) {
-        this.dispatcher.dispatcher(this.channel, p);
         return this;
     }
 

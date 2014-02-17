@@ -1,11 +1,10 @@
 package com.taobao.teaey.lostrpc.server;
 
 
+import com.taobao.teaey.lostrpc.Dispatcher;
+import com.taobao.teaey.lostrpc.NettyChannelInitializer;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
@@ -15,16 +14,27 @@ import java.net.SocketAddress;
 /**
  * Created by xiaofei.wxf on 14-2-13.
  */
-public class NettyServer implements Server {
+public class NettyServer<ReqType> implements Server<Channel, ReqType> {
     private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private final ServerBootstrap b = newServerBootStrap();
     private SocketAddress addr;
 
-    private ChannelInitializer initializer;
+    private NettyChannelInitializer initializer;
 
-    public NettyServer initializer(ChannelInitializer initializer) {
+    private Dispatcher<Channel, ReqType> dispatcher;
+
+    public static NettyServer newInstance() {
+        return new NettyServer();
+    }
+
+    private NettyServer() {
+    }
+
+    public NettyServer initializer(NettyChannelInitializer initializer) {
         this.initializer = initializer;
+        if (this.dispatcher != null)
+            this.initializer.dispatchHandler(this.dispatcher);
         return this;
     }
 
@@ -33,7 +43,7 @@ public class NettyServer implements Server {
         if (null == addr) {
             throw new NullPointerException("socket addr");
         }
-        if(null == initializer){
+        if (null == initializer) {
             throw new NullPointerException("channel initializer");
         }
         b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(this.initializer);
@@ -49,9 +59,10 @@ public class NettyServer implements Server {
     }
 
     @Override
-    public void shutdown() {
+    public Server shutdown() {
         workerGroup.shutdownGracefully();
         bossGroup.shutdownGracefully();
+        return this;
     }
 
     @Override
@@ -67,8 +78,18 @@ public class NettyServer implements Server {
     }
 
     @Override
-    public void showdownNow() {
+    public Server showdownNow() {
         shutdown();
+        return this;
+    }
+
+    @Override
+    public Server dispatcher(Dispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+        if (this.initializer != null) {
+            this.initializer.dispatchHandler(this.dispatcher);
+        }
+        return this;
     }
 
     protected ServerBootstrap newServerBootStrap() {

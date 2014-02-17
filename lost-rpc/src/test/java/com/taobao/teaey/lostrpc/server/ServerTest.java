@@ -1,8 +1,11 @@
 package com.taobao.teaey.lostrpc.server;
 
+import com.google.protobuf.*;
 import com.taobao.teaey.lostrpc.Dispatcher;
 import com.taobao.teaey.lostrpc.LostProto;
 import com.taobao.teaey.lostrpc.NettyChannelInitializer;
+import com.taobao.teaey.lostrpc.common.JsonInitializer;
+import com.taobao.teaey.lostrpc.common.ProtobufInitializer;
 import io.netty.channel.Channel;
 import org.junit.Test;
 
@@ -14,23 +17,47 @@ import java.io.IOException;
 public class ServerTest {
     @Test
     public void protobufServer() throws IOException, InterruptedException {
-        NettyChannelInitializer initializer = NettyChannelInitializer.newProtobufInitializer(LostProto.Packet.getDefaultInstance(),new NettyServerHandler(new Dispatcher<Channel, LostProto.Packet>() {
+        Dispatcher<Channel, LostProto.Packet> d = new Dispatcher<Channel, LostProto.Packet>() {
+            private BlockingService service = LostProto.LoginService.newReflectiveBlockingService(new LostProto.LoginService.BlockingInterface() {
+
+                @Override
+                public LostProto.Login_S2C login(RpcController controller, LostProto.Login_C2S request) throws ServiceException {
+                    LostProto.Login_S2C resp = LostProto.Login_S2C.newBuilder().setTimestamp(System.currentTimeMillis()).build();
+                    return resp;
+                }
+
+            });
+
             @Override
-            public void dispatcher(Channel o, LostProto.Packet p) {
-                o.writeAndFlush(p);
+            public void dispatch(Channel o, LostProto.Packet p) {
+                String methodName = p.getMethodName();
+                String serviceName = p.getServiceName();
+                Descriptors.MethodDescriptor md = service.getDescriptorForType().findMethodByName(methodName);
+                try {
+                    Message resp = service.callBlockingMethod(md, null, service.getRequestPrototype(md).getParserForType().parseFrom(p.getData()));
+                    o.writeAndFlush(LostProto.Packet.newBuilder(p).setData(resp.toByteString()).build());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }));
-        new NettyServer().initializer(initializer).bind(8888).run();
+        };
+        NettyChannelInitializer initializer = ProtobufInitializer.newInstance(LostProto.Packet.getDefaultInstance());
+
+        NettyServer.newInstance()
+                .initializer(initializer)
+                .dispatcher(d)
+                .bind(8888)
+                .run();
+
     }
 
     @Test
     public void jsonServer() throws IOException, InterruptedException {
-        NettyChannelInitializer initializer = NettyChannelInitializer.newJsonInitializer(new NettyServerHandler(new Dispatcher<Channel, Object>() {
+        NettyServer.newInstance().initializer(JsonInitializer.newInstance()).dispatcher(new Dispatcher<Channel, Object>() {
             @Override
-            public void dispatcher(Channel o, Object p) {
+            public void dispatch(Channel o, Object p) {
                 o.writeAndFlush(p);
             }
-        }));
-        new NettyServer().initializer(initializer).bind(8888).run();
+        }).bind(8888).run();
     }
 }

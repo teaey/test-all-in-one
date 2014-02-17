@@ -6,11 +6,11 @@ option optimize_for = SPEED;
 option java_generic_services = true;
 
 message Packet {
-    required int64 id = 1;
-}
-
-message MsgFields {
-
+    required int64 p_id = 1;
+    required string service_name = 2;
+    required string method_name = 4;
+    required bytes data = 8;
+    required int64 timestamp = 16;
 }
 
 message Login_C2S {

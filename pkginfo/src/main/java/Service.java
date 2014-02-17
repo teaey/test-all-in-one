@@ -6,7 +6,7 @@ import java.lang.annotation.Annotation;
  */
 public class Service {
     public static void main(String[] args) {
-        final String pkg = "xiaofei.pkginfo";
+        final String pkg = "";
         Package p = Package.getPackage(pkg);
         for (Annotation each : p.getAnnotations()) {
             System.out.println(each);
