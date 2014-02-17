@@ -2,6 +2,8 @@ package com.taobao.teaey.lostrpc;
 
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.MessageLite;
+import com.taobao.teaey.lostrpc.client.NettyClient;
+import com.taobao.teaey.lostrpc.client.NettyClientDispatchHandler;
 import com.taobao.teaey.lostrpc.codec.JsonCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -199,7 +201,7 @@ public abstract class NettyChannelInitializer extends ChannelInitializer {
 
         private ProtobufInitializer(MessageLite prototype, ChannelHandler[] handlers) {
             super(handlers);
-            if(null == prototype){
+            if (null == prototype) {
                 throw new NullPointerException("prototype");
             }
             this.defaultIns = prototype;
@@ -207,7 +209,7 @@ public abstract class NettyChannelInitializer extends ChannelInitializer {
 
         private ProtobufInitializer(MessageLite prototype, ChannelHandler handler) {
             super(handler);
-            if(null == prototype){
+            if (null == prototype) {
                 throw new NullPointerException("prototype");
             }
             this.defaultIns = prototype;
@@ -243,6 +245,8 @@ public abstract class NettyChannelInitializer extends ChannelInitializer {
 
     protected final ChannelHandler[] handlers;
 
+    protected ChannelHandler dispatchHandler;
+
     public NettyChannelInitializer(ChannelHandler[] handlers) {
         this.handlers = handlers;
     }
@@ -259,7 +263,10 @@ public abstract class NettyChannelInitializer extends ChannelInitializer {
             ch.pipeline().addLast("LOGGING_HANDLER", LOGGING_HANDLER);
         }
         handlers(ch);
+        ch.pipeline().addLast(this.dispatchHandler);
     }
+
+    private NettyClient nettyClient;
 
     protected abstract void decoders(Channel ch) throws Exception;
 
@@ -268,4 +275,9 @@ public abstract class NettyChannelInitializer extends ChannelInitializer {
     protected abstract void handlers(Channel ch) throws Exception;
 
     protected abstract Logger getLogger();
+
+    public void client(NettyClient client) {
+        this.nettyClient = client;
+        this.dispatchHandler = new NettyClientDispatchHandler(this.nettyClient);
+    }
 }

@@ -1,6 +1,7 @@
 package com.taobao.teaey.lostrpc.client;
 
 import com.taobao.teaey.lostrpc.Dispatcher;
+import com.taobao.teaey.lostrpc.NettyChannelInitializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -16,7 +17,7 @@ public class NettyClient<A, B> implements Client<A, B> {
     private final Bootstrap b = newBootstrap();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private SocketAddress addr;
-    private ChannelInitializer initializer;
+    private NettyChannelInitializer initializer;
     private Channel channel;
 
     private Dispatcher<Channel, B> dispatcher;
@@ -24,8 +25,9 @@ public class NettyClient<A, B> implements Client<A, B> {
     public NettyClient() {
     }
 
-    public Client initializer(ChannelInitializer initializer) {
+    public Client initializer(NettyChannelInitializer initializer) {
         this.initializer = initializer;
+        this.initializer.client(this);
         return this;
     }
 
@@ -39,7 +41,7 @@ public class NettyClient<A, B> implements Client<A, B> {
         if (null == addr) {
             throw new NullPointerException("socket address");
         }
-        if(null == initializer){
+        if (null == initializer) {
             throw new NullPointerException("channel initializer");
         }
         try {
@@ -51,8 +53,9 @@ public class NettyClient<A, B> implements Client<A, B> {
     }
 
     @Override
-    public void shutdown() {
+    public Client shutdown() {
         workerGroup.shutdownGracefully();
+        return this;
     }
 
     @Override
@@ -62,8 +65,8 @@ public class NettyClient<A, B> implements Client<A, B> {
     }
 
     @Override
-    public void showdownNow() {
-        shutdown();
+    public Client showdownNow() {
+        return shutdown();
     }
 
     @Override

@@ -11,11 +11,11 @@ public interface Client<A, B> {
 
     Client run();
 
-    void shutdown();
+    Client shutdown();
 
     Client connect(InetSocketAddress address);
 
-    void showdownNow();
+    Client showdownNow();
 
     Client send(A p);
 

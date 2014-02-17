@@ -2,7 +2,6 @@ package com.taobao.teaey.lostrpc.codec;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -73,14 +72,4 @@ public class CodecsTest {
         }
     }
 
-    @Test
-    public void json() {
-        Gson gson = new Gson();
-//        System.out.println(gson.toJson(datePojo));
-//        System.out.println(JSON.toJSONString(datePojo));
-        System.out.println(gson.toJson(obj));
-        System.out.println(JSON.toJSONString(obj));
-        System.out.println(JSON.toJSONString(obj, SerializerFeature.WriteDateUseDateFormat, SerializerFeature.WriteClassName));
-        System.out.println(JSON.toJSONString(obj, SerializerFeature.UseISO8601DateFormat));
-    }
 }
