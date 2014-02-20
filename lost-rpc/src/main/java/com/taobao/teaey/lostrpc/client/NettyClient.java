@@ -2,8 +2,10 @@ package com.taobao.teaey.lostrpc.client;
 
 import com.taobao.teaey.lostrpc.Dispatcher;
 import com.taobao.teaey.lostrpc.NettyChannelInitializer;
+import com.taobao.teaey.lostrpc.common.DispatchHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -15,14 +17,14 @@ import java.net.SocketAddress;
 /**
  * Created by xiaofei.wxf on 14-2-13.
  */
-public class NettyClient<ReqType, RespType> implements Client<ReqType, RespType, Channel> {
+public class NettyClient<ReqType, RespType> implements Client<ReqType, RespType, Channel, NettyClient> {
     private final Bootstrap b = newBootstrap();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private SocketAddress addr;
     private NettyChannelInitializer initializer;
     private Channel channel;
 
-    private Dispatcher<Channel, RespType> dispatcher;
+    private DispatchHandler<RespType> dispatcherHandler;
 
     private NettyClient() {
     }
@@ -31,24 +33,24 @@ public class NettyClient<ReqType, RespType> implements Client<ReqType, RespType,
         return new NettyClient();
     }
 
-    public Client initializer(NettyChannelInitializer initializer) {
+    public NettyClient initializer(NettyChannelInitializer initializer) {
         this.initializer = initializer;
-        if (null != this.dispatcher) {
-            this.initializer.dispatchHandler(this.dispatcher);
+        if (null != this.dispatcherHandler) {
+            this.initializer.dispatchHandler(this.dispatcherHandler);
         }
         return this;
     }
 
-    public Client dispatcher(Dispatcher dispatcher) {
-        this.dispatcher = dispatcher;
+    public NettyClient dispatcher(Dispatcher dispatcher) {
+        this.dispatcherHandler = new DispatchHandler(dispatcher);
         if (this.initializer != null) {
-            this.initializer.dispatchHandler(this.dispatcher);
+            this.initializer.dispatchHandler(dispatcherHandler);
         }
         return this;
     }
 
     @Override
-    public Client run() {
+    public NettyClient run() {
         if (null == addr) {
             throw new NullPointerException("socket address");
         }
@@ -64,26 +66,25 @@ public class NettyClient<ReqType, RespType> implements Client<ReqType, RespType,
     }
 
     @Override
-    public Client shutdown() {
+    public NettyClient shutdown() {
         workerGroup.shutdownGracefully();
         return this;
     }
 
     @Override
-    public Client connect(InetSocketAddress address) {
+    public NettyClient connect(InetSocketAddress address) {
         this.addr = address;
         return this;
     }
 
     @Override
-    public Client showdownNow() {
+    public NettyClient showdownNow() {
         return shutdown();
     }
 
     @Override
-    public Client send(ReqType p) {
-        this.channel.writeAndFlush(p);
-        return this;
+    public ChannelFuture ask(ReqType p) {
+        return this.channel.writeAndFlush(p);
     }
 
     protected Bootstrap newBootstrap() {

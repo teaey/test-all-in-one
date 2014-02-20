@@ -1,4 +1,4 @@
-package com.taobao.teaey.lostrpc;
+package com.taobao.teaey.lostrpc.common;
 
 option java_outer_classname = "LostProto";
 
@@ -11,17 +11,5 @@ message Packet {
     required string method_name = 4;
     required bytes data = 8;
     required int64 timestamp = 16;
-}
-
-message Login_C2S {
-    required int64 timestamp = 1;
-}
-
-message Login_S2C {
-    required int64 timestamp = 1;
-}
-
-service LoginService {
-    rpc login (Login_C2S) returns (Login_S2C);
 }
 

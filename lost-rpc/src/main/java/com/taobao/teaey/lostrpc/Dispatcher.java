@@ -5,4 +5,9 @@ package com.taobao.teaey.lostrpc;
  */
 public interface Dispatcher<C, T> {
     void dispatch(C c, T p);
+
+    interface Task extends Runnable {
+        @Override
+        void run();
+    }
 }

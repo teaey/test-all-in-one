@@ -7,18 +7,18 @@ import java.net.SocketAddress;
 /**
  * Created by xiaofei.wxf on 14-2-13.
  */
-public interface Server<Channel, ReqType> {
+public interface Server<Channel, ReqType, T extends Server> {
 
-    public Server run();
+    T run();
 
-    public Server shutdown();
+    T shutdown();
 
-    public Server bind(int port);
+    T bind(int port);
 
-    public Server bind(SocketAddress address);
+    T bind(SocketAddress address);
 
-    public Server showdownNow();
+    T showdownNow();
 
-    Server dispatcher(Dispatcher<Channel, ReqType> dispatcher);
+    T dispatcher(Dispatcher<Channel, ReqType> dispatcher);
 
 }

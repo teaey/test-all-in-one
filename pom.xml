@@ -22,6 +22,7 @@
         <module>code4fun3</module>
         <module>pkginfo</module>
         <module>java</module>
+        <module>test-rpc</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

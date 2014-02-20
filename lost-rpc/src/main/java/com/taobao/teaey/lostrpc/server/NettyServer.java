@@ -3,6 +3,7 @@ package com.taobao.teaey.lostrpc.server;
 
 import com.taobao.teaey.lostrpc.Dispatcher;
 import com.taobao.teaey.lostrpc.NettyChannelInitializer;
+import com.taobao.teaey.lostrpc.common.DispatchHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -14,7 +15,7 @@ import java.net.SocketAddress;
 /**
  * Created by xiaofei.wxf on 14-2-13.
  */
-public class NettyServer<ReqType> implements Server<Channel, ReqType> {
+public class NettyServer<ReqType> implements Server<Channel, ReqType, NettyServer> {
     private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private final ServerBootstrap b = newServerBootStrap();
@@ -34,12 +35,12 @@ public class NettyServer<ReqType> implements Server<Channel, ReqType> {
     public NettyServer initializer(NettyChannelInitializer initializer) {
         this.initializer = initializer;
         if (this.dispatcher != null)
-            this.initializer.dispatchHandler(this.dispatcher);
+            this.initializer.dispatchHandler(new DispatchHandler(this.dispatcher));
         return this;
     }
 
     @Override
-    public Server run() {
+    public NettyServer run() {
         if (null == addr) {
             throw new NullPointerException("socket addr");
         }
@@ -59,35 +60,35 @@ public class NettyServer<ReqType> implements Server<Channel, ReqType> {
     }
 
     @Override
-    public Server shutdown() {
+    public NettyServer shutdown() {
         workerGroup.shutdownGracefully();
         bossGroup.shutdownGracefully();
         return this;
     }
 
     @Override
-    public Server bind(int port) {
+    public NettyServer bind(int port) {
         this.addr = new InetSocketAddress(port);
         return this;
     }
 
     @Override
-    public Server bind(SocketAddress address) {
+    public NettyServer bind(SocketAddress address) {
         this.addr = address;
         return this;
     }
 
     @Override
-    public Server showdownNow() {
+    public NettyServer showdownNow() {
         shutdown();
         return this;
     }
 
     @Override
-    public Server dispatcher(Dispatcher dispatcher) {
+    public NettyServer dispatcher(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
         if (this.initializer != null) {
-            this.initializer.dispatchHandler(this.dispatcher);
+            this.initializer.dispatchHandler(new DispatchHandler(this.dispatcher));
         }
         return this;
     }

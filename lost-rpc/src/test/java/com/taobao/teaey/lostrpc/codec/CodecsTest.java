@@ -1,7 +1,5 @@
 package com.taobao.teaey.lostrpc.codec;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.taobao.teaey.lostrpc;
+package com.taobao.teaey.lostrpc.common;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufHolder;
@@ -36,116 +36,116 @@ public class TightLoggingHandler extends ChannelDuplexHandler {
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        super.channelRegistered(ctx);
         /* 提前判断日志级别, 避免过多计算, 下同 */
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "REGISTERED"));
         }
-        super.channelRegistered(ctx);
     }
 
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+        super.channelUnregistered(ctx);
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "UNREGISTERED"));
         }
-        super.channelUnregistered(ctx);
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "ACTIVE"));
         }
-        super.channelActive(ctx);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "INACTIVE"));
         }
-        super.channelInactive(ctx);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "EXCEPTION: " + cause), cause);
         }
-        super.exceptionCaught(ctx, cause);
     }
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        super.userEventTriggered(ctx, evt);
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "USER_EVENT: " + evt));
         }
-        super.userEventTriggered(ctx, evt);
     }
 
     @Override
     public void bind(ChannelHandlerContext ctx, SocketAddress localAddress, ChannelPromise promise) throws Exception {
+        super.bind(ctx, localAddress, promise);
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "BIND(" + localAddress + ')'));
         }
-        super.bind(ctx, localAddress, promise);
     }
 
     @Override
     public void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress, SocketAddress localAddress,
                         ChannelPromise promise) throws Exception {
+        super.connect(ctx, remoteAddress, localAddress, promise);
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "CONNECT(" + remoteAddress + ", " + localAddress + ')'));
         }
-        super.connect(ctx, remoteAddress, localAddress, promise);
     }
 
     @Override
     public void disconnect(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
+        super.disconnect(ctx, promise);
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "DISCONNECT()"));
         }
-        super.disconnect(ctx, promise);
     }
 
     @Override
     public void close(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
+        super.close(ctx, promise);
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "CLOSE()"));
         }
-        super.close(ctx, promise);
     }
 
     @Override
     public void deregister(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
+        super.deregister(ctx, promise);
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "DEREGISTER()"));
         }
-        super.deregister(ctx, promise);
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        ctx.fireChannelRead(msg);
         if (logger.isDebugEnabled()) {
             logMessage(ctx, "RECEIVED", msg);
         }
-        ctx.fireChannelRead(msg);
     }
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+        ctx.write(msg, promise);
         if (logger.isDebugEnabled()) {
             logMessage(ctx, "WRITE", msg);
         }
-        ctx.write(msg, promise);
     }
 
     @Override
     public void flush(ChannelHandlerContext ctx) throws Exception {
+        ctx.flush();
         if (logger.isDebugEnabled()) {
             logger.debug(format(ctx, "FLUSH"));
         }
-        ctx.flush();
     }
 
     private void logMessage(ChannelHandlerContext ctx, String eventName, Object msg) {

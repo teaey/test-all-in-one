@@ -12,6 +12,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.activation.UnsupportedDataTypeException;
 import java.util.List;
 
 /**
@@ -44,10 +45,17 @@ public class ProtobufInitializer extends NettyChannelInitializer {
     }
 
     @ChannelHandler.Sharable
-    private class Encoder extends MessageToByteEncoder<MessageLite> {
+    private class Encoder extends MessageToByteEncoder<Object> {
         @Override
-        protected void encode(ChannelHandlerContext ctx, MessageLite msg, ByteBuf out) throws Exception {
-            byte[] body = msg.toByteArray();
+        protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
+            byte[] body;
+            if (msg instanceof MessageLite) {
+                body = ((MessageLite) msg).toByteArray();
+            } else if (msg instanceof MessageLite.Builder) {
+                body = ((MessageLite.Builder) msg).build().toByteArray();
+            } else {
+                throw new UnsupportedDataTypeException(msg.getClass().getName());
+            }
             int bodyLen = body.length;
             out.ensureWritable(4 + bodyLen);
             out.writeInt(bodyLen);

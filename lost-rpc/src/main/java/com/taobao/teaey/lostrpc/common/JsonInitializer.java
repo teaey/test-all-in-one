@@ -1,6 +1,5 @@
 package com.taobao.teaey.lostrpc.common;
 
-import com.taobao.teaey.lostrpc.LostProto;
 import com.taobao.teaey.lostrpc.NettyChannelInitializer;
 import com.taobao.teaey.lostrpc.codec.JsonCodec;
 import io.netty.buffer.ByteBuf;
@@ -9,7 +8,6 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +64,6 @@ public class JsonInitializer extends NettyChannelInitializer {
     }
 
     private final ChannelHandler encoder = new Encoder();
-    private final ChannelHandler protobufDecoder = new ProtobufDecoder(LostProto.Packet.getDefaultInstance());
 
     private JsonInitializer(ChannelHandler... handlers) {
         super(handlers);

@@ -7,18 +7,18 @@ import java.net.InetSocketAddress;
 /**
  * Created by xiaofei.wxf on 14-2-13.
  */
-public interface Client<ReqType, RespType, Channel> {
+public interface Client<ReqType, RespType, Channel, T extends Client> {
 
-    Client run();
+    T run();
 
-    Client shutdown();
+    T shutdown();
 
-    Client connect(InetSocketAddress address);
+    T connect(InetSocketAddress address);
 
-    Client showdownNow();
+    T showdownNow();
 
-    Client send(ReqType p);
+    Object ask(ReqType p);
 
-    Client dispatcher(Dispatcher dispatcher);
+    T dispatcher(Dispatcher dispatcher);
 
 }

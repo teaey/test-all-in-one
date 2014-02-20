@@ -1,6 +1,7 @@
 package com.taobao.teaey.lostrpc;
 
 import com.taobao.teaey.lostrpc.common.DispatchHandler;
+import com.taobao.teaey.lostrpc.common.TightLoggingHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
@@ -44,7 +45,7 @@ public abstract class NettyChannelInitializer extends ChannelInitializer {
     protected abstract Logger getLogger();
 
 
-    public void dispatchHandler(Dispatcher dispatcher) {
-        this.dispatchHandler = new DispatchHandler(dispatcher);
+    public void dispatchHandler(DispatchHandler dispatcher) {
+        this.dispatchHandler = dispatcher;
     }
 }
