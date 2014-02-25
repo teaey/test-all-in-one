@@ -15,7 +15,7 @@
         <module>proxy</module>
         <module>service-loader</module>
         <module>protobuf</module>
-        <module>socket</module>
+        <module>net</module>
         <module>netty</module>
         <module>lost-rpc</module>
         <module>bytecode</module>
