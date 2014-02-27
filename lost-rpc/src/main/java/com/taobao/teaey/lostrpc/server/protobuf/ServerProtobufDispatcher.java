@@ -3,6 +3,7 @@ package com.taobao.teaey.lostrpc.server.protobuf;
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
+import com.taobao.teaey.lostrpc.Dispatcher;
 import com.taobao.teaey.lostrpc.common.AsyncDispatcher;
 import com.taobao.teaey.lostrpc.common.LostProto;
 import io.netty.channel.Channel;
@@ -16,6 +17,13 @@ import java.util.concurrent.Executor;
  */
 public class ServerProtobufDispatcher extends AsyncDispatcher<LostProto.Packet> {
     protected static final Logger logger = LoggerFactory.getLogger(ServerProtobufDispatcher.class);
+
+    private static final Dispatcher dispatcher0 = new AsyncDispatcher<AsyncDispatcher>(){
+        @Override
+        public void onDispatch(Channel channel, AsyncDispatcher m) throws Exception {
+
+        }
+    };
 
     public ServerProtobufDispatcher() {
     }
