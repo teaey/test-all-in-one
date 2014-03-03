@@ -23,6 +23,7 @@
         <module>pkginfo</module>
         <module>java</module>
         <module>test-rpc</module>
+        <module>zookeeper</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

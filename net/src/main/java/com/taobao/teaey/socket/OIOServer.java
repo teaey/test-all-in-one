@@ -43,11 +43,16 @@ public class OIOServer {
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(8888);
+        serverSocket.setSoTimeout(3000);
         System.out.println("服务器启动，监听端口：" + 8888);
         while (true) {
-            Socket s = serverSocket.accept();
-            new Thread(new Reader(s)).start();
-            System.out.println("新连接");
+            try {
+                Socket s = serverSocket.accept();
+                new Thread(new Reader(s)).start();
+                System.out.println("新连接");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
