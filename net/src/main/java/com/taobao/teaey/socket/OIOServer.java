@@ -3,7 +3,6 @@ package com.taobao.teaey.socket;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 
 /**
  * @author xiaofei.wxf
@@ -20,20 +19,28 @@ public class OIOServer {
         public void run() {
             for (; ; ) {
                 try {
+                    Thread.sleep(10000);
+                    socket.close();
                     int data = socket.getInputStream().read();
                     if (-1 == data) {
                         socket.close();
                         System.out.println("断开连接:" + socket);
                         return;
                     }
-                    ByteBuffer buf = ByteBuffer.allocate(5);
-                    buf.putInt(1);
-                    buf.put((byte) (data + 1));
-                    socket.getOutputStream().write(buf.array());
+                    byte[] bb = new byte[10000];
+                    for (int i = 0; i < 10000; i++) {
+                        bb[i] = (byte) (i+1);
+                    }
+                    socket.getOutputStream().write(bb);
                     socket.getOutputStream().flush();
-                    System.out.println("Read:" + data + " Write:" + (data + 1));
-                } catch (Exception e) {
+                    System.out.println("Read:" + data + " Write:" + (data));
+                } catch (Throwable e) {
                     e.printStackTrace();
+                    try {
+                        socket.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                     System.out.println("断开连接:" + socket);
                     return;
                 }
@@ -43,11 +50,11 @@ public class OIOServer {
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(8888);
-        serverSocket.setSoTimeout(3000);
         System.out.println("服务器启动，监听端口：" + 8888);
         while (true) {
             try {
                 Socket s = serverSocket.accept();
+                s.setTcpNoDelay(true);
                 new Thread(new Reader(s)).start();
                 System.out.println("新连接");
             } catch (Exception e) {

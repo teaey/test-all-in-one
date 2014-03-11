@@ -24,6 +24,8 @@
         <module>java</module>
         <module>test-rpc</module>
         <module>zookeeper</module>
+        <module>mashape</module>
+        <module>mapdb</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
