@@ -27,11 +27,7 @@ public class OIOServer {
                         System.out.println("断开连接:" + socket);
                         return;
                     }
-                    byte[] bb = new byte[10000];
-                    for (int i = 0; i < 10000; i++) {
-                        bb[i] = (byte) (i+1);
-                    }
-                    socket.getOutputStream().write(bb);
+                    socket.getOutputStream().write(data);
                     socket.getOutputStream().flush();
                     System.out.println("Read:" + data + " Write:" + (data));
                 } catch (Throwable e) {

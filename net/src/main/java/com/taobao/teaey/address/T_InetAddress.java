@@ -23,8 +23,5 @@ public class T_InetAddress {
         System.out.println(InetAddress.getLocalHost());
         //MININT-QG7RUB5/192.168.73.1
 
-        System.out.println(InetAddress.getLoopbackAddress());
-        //localhost/127.0.0.1
-
     }
 }

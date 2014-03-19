@@ -967,7 +967,7 @@
         <appender-ref ref="categoryAppender"/>
     </logger>
 
-    <logger name="com.taobao.biz.common.bo.impl" level="WARN" additivity="false">
+    <logger name="com.taobao.biz.common.bo.encrypt.impl" level="WARN" additivity="false">
         <appender-ref ref="categoryAppender"/>
     </logger>
 
@@ -1177,7 +1177,7 @@
         <appender-ref ref="itemCacheAppender"/>
     </logger>
 
-    <logger name="com.taobao.item.service.impl.ItemTairCacheServiceImpl" level="INFO" additivity="false">
+    <logger name="com.taobao.item.service.encrypt.impl.ItemTairCacheServiceImpl" level="INFO" additivity="false">
         <appender-ref ref="itemCacheAppender"/>
     </logger>
 

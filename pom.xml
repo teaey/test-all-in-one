@@ -26,6 +26,8 @@
         <module>zookeeper</module>
         <module>mashape</module>
         <module>mapdb</module>
+        <module>Qrcode</module>
+        <module>encryption</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
