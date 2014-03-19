@@ -10,9 +10,8 @@ public abstract class InterruptSupport implements InterruptAble {
     private Interruptible interruptor = new Interruptible() {
 
         @Override
-        public void interrupt(Thread thread) {
-            interrupted = true;
-            InterruptSupport.this.interrupt(thread); // 位置3
+        public void interrupt() {
+
         }
     };
 
@@ -20,7 +19,7 @@ public abstract class InterruptSupport implements InterruptAble {
         try {
             blockedOn(interruptor); // 位置1
             if (Thread.currentThread().isInterrupted()) { // 立马被interrupted
-                interruptor.interrupt(Thread.currentThread());
+                //interruptor.interrupt(Thread.currentThread());
             }
             // 执行业务代码
             bussiness();
