@@ -12,8 +12,9 @@ public class UDPServer {
         try {
             DatagramSocket ser = new DatagramSocket(8888);
             DatagramPacket packet = new DatagramPacket(new byte[1024], 0, 3);
-            while(true){
-                System.out.println(packet.getAddress() + ":" + packet.getPort() + "->" + new String(Utils.recv(ser, packet)));
+            while (true) {
+                System.out.println(packet.getAddress() + ":" + packet.getPort() + "->" + new String(
+                    Utils.recv(ser, packet)));
                 packet.setAddress(InetAddress.getByName("localhost"));
                 packet.setPort(8889);
                 Utils.send(ser, packet);

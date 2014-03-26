@@ -16,22 +16,12 @@ import java.util.concurrent.CountDownLatch;
 public class NioClient implements Client<NioClient> {
 
 
-    public int getId() {
-        return System.identityHashCode(this.socketChannel);
-    }
-
-    public SocketChannel getSocketChannel() {
-        return socketChannel;
-    }
-
+    private final CountDownLatch latch = new CountDownLatch(1);
     private SocketChannel socketChannel;
-
-    public void setDispatcher(ResponseDispatcher dispatcher) {
-        this.dispatcher = dispatcher;
-    }
-
     private ResponseDispatcher dispatcher;
-
+    private int msgLen;
+    private ByteBuffer buffer = ByteBuffer.allocate(1024);
+    private ByteBuffer msg;
 
     NioClient() {
         try {
@@ -40,6 +30,18 @@ public class NioClient implements Client<NioClient> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public int getId() {
+        return System.identityHashCode(this.socketChannel);
+    }
+
+    public SocketChannel getSocketChannel() {
+        return socketChannel;
+    }
+
+    public void setDispatcher(ResponseDispatcher dispatcher) {
+        this.dispatcher = dispatcher;
     }
 
     @Override
@@ -54,8 +56,6 @@ public class NioClient implements Client<NioClient> {
         return this;
     }
 
-    private final CountDownLatch latch = new CountDownLatch(1);
-
     public void sync() throws InterruptedException {
         latch.await();
     }
@@ -67,11 +67,6 @@ public class NioClient implements Client<NioClient> {
             NioClientFactory.register(socketChannel, SelectionKey.OP_READ);
         }
     }
-
-    private int msgLen;
-    private ByteBuffer buffer = ByteBuffer.allocate(1024);
-
-    private ByteBuffer msg;
 
     void doRead() throws IOException {
         while (true) {

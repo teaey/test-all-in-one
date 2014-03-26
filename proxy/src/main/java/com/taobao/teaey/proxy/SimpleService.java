@@ -6,5 +6,6 @@ package com.taobao.teaey.proxy;
  */
 public interface SimpleService {
     int random();
+
     int random(int seed);
 }

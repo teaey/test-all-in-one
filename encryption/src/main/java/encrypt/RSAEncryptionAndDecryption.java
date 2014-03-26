@@ -21,18 +21,15 @@ public class RSAEncryptionAndDecryption implements EncryptionAndDecryption {
     //1024 117
     //2048 245
 
-    private PublicKey publicKey;
-
-    private PrivateKey privateKey;
-
-    public RSAEncryptionAndDecryption() {
-
-    }
-
     public static final String ALGORITHM = "RSA";
     public static final String AES_CIPHER = "AESEncryptionAndDecryption/ECB/NoPadding";
     public static final String RSA_CIPHER = "RSA/ECB/PKCS1PADDING";
     public static final String RSA_SIGNATURE = "MD5withRSA";
+    private PublicKey publicKey;
+    private PrivateKey privateKey;
+    public RSAEncryptionAndDecryption() {
+
+    }
 
     public void loadPubkeyFromFile(String path) throws Exception {
         File file = new File(path);
@@ -90,8 +87,9 @@ public class RSAEncryptionAndDecryption implements EncryptionAndDecryption {
         StringBuilder sb = new StringBuilder();
         String line = null;
         while (((line = in.readLine()) != null)) {
-            if ((line.charAt(0) != '-') && (line.charAt(line.length() - 1) != '-'))
+            if ((line.charAt(0) != '-') && (line.charAt(line.length() - 1) != '-')) {
                 sb.append(line);
+            }
         }
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] ret = decoder.decodeBuffer(sb.toString());

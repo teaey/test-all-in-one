@@ -1,7 +1,5 @@
 package classloader;
 
-import javax.naming.Context;
-
 /**
  * Created by xiaofei.wxf on 2014/3/19.
  */

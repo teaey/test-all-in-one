@@ -8,7 +8,8 @@ import com.google.protobuf.ServiceException;
  */
 public class TestServiceImpl implements TestProto.TestService.BlockingInterface {
     @Override
-    public TestProto.TestResponse_S2C testMethod(RpcController controller, TestProto.TestRequest_C2S request) throws ServiceException {
+    public TestProto.TestResponse_S2C testMethod(RpcController controller,
+        TestProto.TestRequest_C2S request) throws ServiceException {
         return null;
     }
 }

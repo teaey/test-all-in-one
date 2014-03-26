@@ -16,7 +16,8 @@ import java.io.IOException;
 public class Server {
     public static void main(String[] args) throws UnirestException, IOException {
         //注册请求处理的类，类需要继承具体Service接口
-        ProtobufRegisterCenter.addService(TestProto.TestService.newReflectiveBlockingService(new TestServiceImpl()));
+        ProtobufRegisterCenter
+            .addService(TestProto.TestService.newReflectiveBlockingService(new TestServiceImpl()));
         //创建服务器
         NettyServer server = NettyServer.newInstance();
         //设置消息分发器，这里创建一个两个线程的一部分发器

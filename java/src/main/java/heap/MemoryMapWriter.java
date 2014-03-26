@@ -13,7 +13,8 @@ import java.nio.channels.FileChannel;
  */
 public class MemoryMapWriter {
 
-    public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException {
+    public static void main(String[] args)
+        throws FileNotFoundException, IOException, InterruptedException {
         File f = new File("D:/mapped.txt");
         f.delete();
 
@@ -34,8 +35,9 @@ public class MemoryMapWriter {
             }
             mem.putLong(counter);
             counter++;
-            if (counter > noOfMessage)
+            if (counter > noOfMessage) {
                 break;
+            }
         }
         long endT = System.currentTimeMillis();
         long tot = endT - startT;

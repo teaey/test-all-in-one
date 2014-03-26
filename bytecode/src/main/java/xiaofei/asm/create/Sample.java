@@ -18,8 +18,8 @@ public class Sample<T extends ProxyInterface> extends ClassLoader {
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
         ClassWriter cw = new ClassWriter(1);
         cw.visit(V1_5, ACC_PUBLIC,
-                "xiaofei/asm/Proxy1", null, "java/lang/Object",
-                new String[]{"xiaofei/asm/ProxyInterface"});
+            "xiaofei/asm/Proxy1", null, "java/lang/Object",
+            new String[] {"xiaofei/asm/ProxyInterface"});
         //构造函数
         MethodVisitor init = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
         init.visitCode();
@@ -37,7 +37,8 @@ public class Sample<T extends ProxyInterface> extends ClassLoader {
         //handle方法
 
 
-        MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "handle", "(Ljava/lang/String;)V", null, null);
+        MethodVisitor mv =
+            cw.visitMethod(ACC_PUBLIC, "handle", "(Ljava/lang/String;)V", null, null);
         mv.visitCode();
 
         Label returnLabel = new Label();
@@ -84,14 +85,17 @@ public class Sample<T extends ProxyInterface> extends ClassLoader {
         mv.visitEnd();
 
         byte[] classBytecode = cw.toByteArray();
-        Class<? extends ProxyInterface> c = (Class<? extends ProxyInterface>) new Sample().defineClass("xiaofei.asm.Proxy1", classBytecode, 0, classBytecode.length);
+        Class<? extends ProxyInterface> c = (Class<? extends ProxyInterface>) new Sample()
+            .defineClass("xiaofei.asm.Proxy1", classBytecode, 0, classBytecode.length);
         ProxyInterface proxyInterface = c.newInstance();
         proxyInterface.handle("Login");
         proxyInterface.handle("Friend");
     }
 
-    private static final void addMethod(final MethodVisitor mv, final Label returnLabel, final String prefix, int currentLine) {
-        final String whileClassName = new StringBuilder("xiaofei/asm/").append(prefix).append("Handler").toString();
+    private static final void addMethod(final MethodVisitor mv, final Label returnLabel,
+        final String prefix, int currentLine) {
+        final String whileClassName =
+            new StringBuilder("xiaofei/asm/").append(prefix).append("Handler").toString();
         mv.visitVarInsn(ALOAD, 1);
         mv.visitLdcInsn(prefix);
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String", "equals", "(Ljava/lang/Object;)Z");

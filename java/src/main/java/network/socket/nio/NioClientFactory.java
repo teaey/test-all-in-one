@@ -20,7 +20,8 @@ public class NioClientFactory {
 
     private static final Selector selector;
 
-    private static final ConcurrentMap<Integer, NioClient> CACHE = new ConcurrentHashMap<Integer, NioClient>();
+    private static final ConcurrentMap<Integer, NioClient> CACHE =
+        new ConcurrentHashMap<Integer, NioClient>();
 
     private static final HashSet<Runnable> Registions = new HashSet<Runnable>();
 
@@ -44,7 +45,8 @@ public class NioClientFactory {
                             worker.execute(new Runnable() {
                                 @Override
                                 public void run() {
-                                    NioClient value = CACHE.get(System.identityHashCode(key.channel()));
+                                    NioClient value =
+                                        CACHE.get(System.identityHashCode(key.channel()));
                                     try {
 
                                         if (null != value) {
@@ -109,11 +111,11 @@ public class NioClientFactory {
         selector.wakeup();
     }
 
-    public static NioClient getClient(int id){
+    public static NioClient getClient(int id) {
         return CACHE.get(id);
     }
 
-    public static NioClient removeClient(int id){
+    public static NioClient removeClient(int id) {
         return CACHE.remove(id);
     }
 }

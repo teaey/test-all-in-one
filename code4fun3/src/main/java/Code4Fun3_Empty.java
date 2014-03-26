@@ -4,6 +4,25 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 public class Code4Fun3_Empty {
+    static final byte dian = '.';
+    static final byte douhao = ',';
+    static final byte jianhao = '-';
+    static final byte langhao = '~';
+    static final byte yinhang = '"';
+    static final byte wenhao = '?';
+    static final byte danyinhao = '\'';
+    static final byte tanhao = '!';
+    static final byte fenhao = ';';
+    static final byte empty = ' ';
+    static final byte enter = '\n';
+    static final byte[] split =
+        new byte[] {dian, douhao, jianhao, langhao, yinhang, wenhao, danyinhao, tanhao, fenhao,
+            empty, enter};
+    static final String[] ingoreArray =
+        new String[] {"the", "and", "i", "to", "of", "a", "in", "was", "that", "had", "he", "you",
+            "his", "my", "it", "as", "with", "her", "for", "on"};
+    static final HashSet<String> ignoreSet = new HashSet<String>(Arrays.asList(ingoreArray));
+
     public static void main(String[] args) throws IOException {
         long start = System.currentTimeMillis();
         Map<String, Integer> map = new HashMap<String, Integer>(50000);
@@ -25,7 +44,10 @@ public class Code4Fun3_Empty {
             charBytes += tmp.position();
             for (byte readed : buffer) {
                 //FIXME:优化
-                if (!(readed == empty || readed == dian || readed == enter || readed == yinhang || readed == douhao || readed == danyinhao || readed == langhao || readed == wenhao || readed == tanhao || readed == jianhao || readed == fenhao)) {
+                if (!(readed == empty || readed == dian || readed == enter || readed == yinhang
+                    || readed == douhao || readed == danyinhao || readed == langhao
+                    || readed == wenhao || readed == tanhao || readed == jianhao
+                    || readed == fenhao)) {
                     charBytes++;
                 }
                 //new Object();
@@ -44,21 +66,6 @@ public class Code4Fun3_Empty {
         System.out.println((end - start) + " ms");
     }
 
-    static final byte dian = '.';
-    static final byte douhao = ',';
-    static final byte jianhao = '-';
-    static final byte langhao = '~';
-    static final byte yinhang = '"';
-    static final byte wenhao = '?';
-    static final byte danyinhao = '\'';
-    static final byte tanhao = '!';
-    static final byte fenhao = ';';
-    static final byte empty = ' ';
-    static final byte enter = '\n';
-    static final byte[] split = new byte[]{dian, douhao, jianhao, langhao, yinhang, wenhao, danyinhao, tanhao, fenhao, empty, enter};
-    static final String[] ingoreArray = new String[]{"the", "and", "i", "to", "of", "a", "in", "was", "that", "had", "he", "you", "his", "my", "it", "as", "with", "her", "for", "on"};
-    static final HashSet<String> ignoreSet = new HashSet<String>(Arrays.asList(ingoreArray));
-
     static final boolean ignore(String word) {
         for (String each : ingoreArray) {
             if (each.equals(word)) {
@@ -69,7 +76,9 @@ public class Code4Fun3_Empty {
     }
 
     static final boolean split(byte readed) {
-        return readed == empty || readed == dian || readed == enter || readed == yinhang || readed == douhao || readed == danyinhao || readed == langhao || readed == wenhao || readed == tanhao || readed == jianhao || readed == fenhao;
+        return readed == empty || readed == dian || readed == enter || readed == yinhang
+            || readed == douhao || readed == danyinhao || readed == langhao || readed == wenhao
+            || readed == tanhao || readed == jianhao || readed == fenhao;
     }
 
     static final boolean split1(byte readed) {
@@ -93,9 +102,9 @@ public class Code4Fun3_Empty {
     static final void print(Map<String, Integer> map) {
         System.out.println("map size:" + map.size());
         final Set<Map.Entry<String, Integer>> entities = map.entrySet();
-//        for (Map.Entry<String, Integer> each : entities) {
-//            System.out.println(each.getKey() + ":" + each.getValue());
-//        }
+        //        for (Map.Entry<String, Integer> each : entities) {
+        //            System.out.println(each.getKey() + ":" + each.getValue());
+        //        }
     }
 
     static final char toLowcase(byte readed) {

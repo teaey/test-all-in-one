@@ -22,27 +22,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Monitor {
 
-    public Monitor(String root) {
-        this.root = root;
-    }
-
-    public static interface ChangedHandler {
-        void handle(List<String> data);
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(Monitor.class);
-
     private static final AtomicInteger CT = new AtomicInteger(1);
-
-    private ZooKeeper zk;
-
+    private static final int TimeOut = 60 * 60 * 1000;
     private final String root;
-
     private final Watcher Watcher = new Watcher() {
         @Override
         public void process(WatchedEvent event) {
             logger.info("{}, {}", event.getType(), event.getState());
-            if (event.getState() == Event.KeeperState.SyncConnected && event.getType() == Event.EventType.NodeChildrenChanged) {
+            if (event.getState() == Event.KeeperState.SyncConnected
+                && event.getType() == Event.EventType.NodeChildrenChanged) {
                 InComQ.add(root);
             }
             try {
@@ -54,9 +43,8 @@ public class Monitor {
             }
         }
     };
-
     private final BlockingQueue<String> InComQ = new LinkedBlockingQueue();
-
+    private final Set<ChangedHandler> handlers = new HashSet<ChangedHandler>();
     private final Thread MonitorHandlerThread = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -73,8 +61,25 @@ public class Monitor {
             }
         }
     }, "MonitorHandlerThread-" + CT.getAndIncrement());
+    private final CountDownLatch sync = new CountDownLatch(1);
+    private ZooKeeper zk;
 
-    private final Set<ChangedHandler> handlers = new HashSet<ChangedHandler>();
+    public Monitor(String root) {
+        this.root = root;
+    }
+
+    public static void main(String[] args)
+        throws IOException, KeeperException, InterruptedException {
+        Monitor m = new Monitor("/g1");
+        m.addHandler(new ChangedHandler() {
+            @Override
+            public void handle(List<String> data) {
+                System.out.println(Arrays.toString(data.toArray()));
+            }
+        });
+        m.monitor("localhost:2181");
+        Thread.sleep(1111111111);
+    }
 
     public void addHandler(ChangedHandler handler) {
         synchronized (handlers) {
@@ -88,24 +93,12 @@ public class Monitor {
         }
     }
 
-    private final CountDownLatch sync = new CountDownLatch(1);
-
-    private static final int TimeOut = 60 * 60 * 1000;
-
     public void monitor(String connectString) throws IOException, KeeperException {
         MonitorHandlerThread.start();
         this.zk = new ZooKeeper(connectString, TimeOut, Watcher);
     }
 
-    public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
-        Monitor m = new Monitor("/g1");
-        m.addHandler(new ChangedHandler() {
-            @Override
-            public void handle(List<String> data) {
-                System.out.println(Arrays.toString(data.toArray()));
-            }
-        });
-        m.monitor("localhost:2181");
-        Thread.sleep(1111111111);
+    public static interface ChangedHandler {
+        void handle(List<String> data);
     }
 }

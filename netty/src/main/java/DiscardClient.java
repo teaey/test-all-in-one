@@ -35,30 +35,13 @@ public class DiscardClient {
         this.firstMessageSize = firstMessageSize;
     }
 
-    public void run() throws Exception {
-        EventLoopGroup group = new NioEventLoopGroup();
-        try {
-            Bootstrap b = new Bootstrap();
-            b.group(group)
-             .channel(NioSocketChannel.class)
-             .handler(new DiscardClientHandler(firstMessageSize));
-
-            // Make the connection attempt.
-            ChannelFuture f = b.connect(host, port).sync();
-
-            // Wait until the connection is closed.
-            f.channel().closeFuture().sync();
-        } finally {
-            group.shutdownGracefully();
-        }
-    }
-
     public static void main(String[] args) throws Exception {
         // Print usage if no argument is specified.
         if (args.length < 2 || args.length > 3) {
             System.err.println(
-                    "Usage: " + DiscardClient.class.getSimpleName() +
-                    " <host> <port> [<first message size>]");
+                "Usage: " + DiscardClient.class.getSimpleName() +
+                    " <host> <port> [<first message size>]"
+            );
             return;
         }
 
@@ -73,5 +56,23 @@ public class DiscardClient {
         }
 
         new DiscardClient(host, port, firstMessageSize).run();
+    }
+
+    public void run() throws Exception {
+        EventLoopGroup group = new NioEventLoopGroup();
+        try {
+            Bootstrap b = new Bootstrap();
+            b.group(group)
+                .channel(NioSocketChannel.class)
+                .handler(new DiscardClientHandler(firstMessageSize));
+
+            // Make the connection attempt.
+            ChannelFuture f = b.connect(host, port).sync();
+
+            // Wait until the connection is closed.
+            f.channel().closeFuture().sync();
+        } finally {
+            group.shutdownGracefully();
+        }
     }
 }

@@ -15,7 +15,8 @@ public class BCServer {
             while (true) {
                 try {
                     socket.receive(packet);
-                    System.out.println(packet.getAddress() + ":" + new String(packet.getData(), 0, packet.getLength()));
+                    System.out.println(packet.getAddress() + ":" + new String(packet.getData(), 0,
+                        packet.getLength()));
                     packet.setLength(1024);
                 } catch (Exception e) {
                     e.printStackTrace();

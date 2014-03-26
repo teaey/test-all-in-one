@@ -5,10 +5,10 @@ import java.util.concurrent.TimeUnit;
  * Date: 13-11-29 下午12:22
  */
 public final class FalseSharing implements Runnable {
-    public static int NUM_THREADS = 8; // change
     public final static long ITERATIONS = 500L * 1000L * 1000L;
-    private final int arrayIndex;
+    public static int NUM_THREADS = 8; // change
     private static VolatileLong[] longs;
+    private final int arrayIndex;
 
     public FalseSharing(final int arrayIndex) {
         this.arrayIndex = arrayIndex;
@@ -27,7 +27,8 @@ public final class FalseSharing implements Runnable {
         }
         final long start = System.nanoTime();
         runTest();
-        System.out.println("duration = " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start));
+        System.out
+            .println("duration = " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start));
     }
 
     private static void runTest() throws InterruptedException {

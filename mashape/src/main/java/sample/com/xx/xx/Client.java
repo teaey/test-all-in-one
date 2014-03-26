@@ -29,9 +29,13 @@ public class Client {
         client.run();
 
         //创建真是的请求，在test.proto中定义的
-        ByteString realReq = TestProto.TestRequest_C2S.newBuilder().setTimestamp(System.currentTimeMillis()).build().toByteString();
+        ByteString realReq =
+            TestProto.TestRequest_C2S.newBuilder().setTimestamp(System.currentTimeMillis()).build()
+                .toByteString();
         //将真是请求放入消息包中
-        LostProto.Packet p = LostProto.Packet.newBuilder().setPId(1).setMethodName("testMethod").setServiceName("com.xx.xx.TestService").setTimestamp(System.currentTimeMillis()).setData(realReq).build();
+        LostProto.Packet p = LostProto.Packet.newBuilder().setPId(1).setMethodName("testMethod")
+            .setServiceName("com.xx.xx.TestService").setTimestamp(System.currentTimeMillis())
+            .setData(realReq).build();
         for (int i = 0; i < 100000; i++) {
             //发送消息包
             client.ask(p);

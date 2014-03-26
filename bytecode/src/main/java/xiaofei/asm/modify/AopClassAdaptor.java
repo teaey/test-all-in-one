@@ -17,12 +17,15 @@ public class AopClassAdaptor extends ClassAdapter implements Opcodes {
     }
 
     @Override
-    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        cv.visit(version, access, name, signature, superName, interfaces);    //To change body of overridden methods use File | Settings | File Templates.
+    public void visit(int version, int access, String name, String signature, String superName,
+        String[] interfaces) {
+        cv.visit(version, access, name, signature, superName,
+            interfaces);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     @Override
-    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature,
+        String[] exceptions) {
         MethodVisitor ret = null;
         ret = cv.visitMethod(access, name, desc, signature, exceptions);
         if (null != ret && name.equals("exec")) {
@@ -47,7 +50,8 @@ public class AopClassAdaptor extends ClassAdapter implements Opcodes {
             mv.visitCode();
             mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
             mv.visitLdcInsn("Before Method");
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
+            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println",
+                "(Ljava/lang/String;)V");
         }
 
         @Override
@@ -55,7 +59,8 @@ public class AopClassAdaptor extends ClassAdapter implements Opcodes {
             if ((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW) {
                 mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
                 mv.visitLdcInsn("After Method");
-                mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
+                mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println",
+                    "(Ljava/lang/String;)V");
             }
             mv.visitInsn(opcode);
         }

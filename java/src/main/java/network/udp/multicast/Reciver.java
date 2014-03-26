@@ -9,20 +9,20 @@ import java.net.DatagramSocket;
 public class Reciver {
     final DatagramSocket socket;
     final Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DatagramPacket p = new DatagramPacket(new byte[1024], 1024);
-                while(true){
-                    try{
-                        socket.receive(p);
-                        System.out.println(new String(p.getData(), 0, p.getLength()));
-                        p.setLength(1024);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+        @Override
+        public void run() {
+            DatagramPacket p = new DatagramPacket(new byte[1024], 1024);
+            while (true) {
+                try {
+                    socket.receive(p);
+                    System.out.println(new String(p.getData(), 0, p.getLength()));
+                    p.setLength(1024);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-        }, "reciver");
+        }
+    }, "reciver");
 
     public Reciver(DatagramSocket socket) {
         this.socket = socket;

@@ -19,7 +19,8 @@ public class DNSCacheTest {
      * @param args
      * @throws java.net.UnknownHostException
      */
-    public static void main(String[] args) throws UnknownHostException, NoSuchFieldException, IllegalAccessException {
+    public static void main(String[] args)
+        throws UnknownHostException, NoSuchFieldException, IllegalAccessException {
         java.security.Security.setProperty("networkaddress.cache.ttl", "0");
         InetAddress addr1 = InetAddress.getByName("www.baidu.com");
         System.out.println(addr1.getHostAddress());
@@ -47,7 +48,7 @@ public class DNSCacheTest {
         final Field cacheMapField = cacheClazz.getDeclaredField("cache");
         cachePolicyField.setAccessible(true);
         cacheMapField.setAccessible(true);
-        final Map cacheMap = (Map)cacheMapField.get(obj);
+        final Map cacheMap = (Map) cacheMapField.get(obj);
         System.out.println(cacheMap);
         cacheMap.remove("www.baidu.com");
     }

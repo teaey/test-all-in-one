@@ -26,21 +26,22 @@ import java.util.logging.Logger;
 public class DiscardServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private static final Logger logger = Logger.getLogger(
-            DiscardServerHandler.class.getName());
+        DiscardServerHandler.class.getName());
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx,
-            Throwable cause) throws Exception {
+        Throwable cause) throws Exception {
         // Close the connection when an exception is raised.
         logger.log(
-                Level.WARNING,
-                "Unexpected exception from downstream.",
-                cause);
+            Level.WARNING,
+            "Unexpected exception from downstream.",
+            cause);
         ctx.close();
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o)
+        throws Exception {
 
     }
 

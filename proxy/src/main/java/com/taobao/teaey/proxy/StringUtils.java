@@ -18,28 +18,29 @@ package com.taobao.teaey.proxy;
 
 /**
  * StringUtils
- * 
+ *
  * @author qian.lei
  */
 
 public final class StringUtils {
 
-	/**
-	 * join string.
-	 * 
-	 * @param array String array.
-	 * @return String.
-	 */
-	public static String join(String[] array)
-	{
-		if( array.length == 0 ) return "";
-		StringBuilder sb = new StringBuilder();
-		for( String s : array )
-			sb.append(s);
-		return sb.toString();
-	}
+    private StringUtils() {
+    }
 
-	
-
-	private StringUtils(){}
+    /**
+     * join string.
+     *
+     * @param array String array.
+     * @return String.
+     */
+    public static String join(String[] array) {
+        if (array.length == 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String s : array) {
+            sb.append(s);
+        }
+        return sb.toString();
+    }
 }

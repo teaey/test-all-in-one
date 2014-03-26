@@ -10,8 +10,10 @@ public class RSATestSample {
     public void rsaPubkey() throws Exception {
         System.out.println("-----");
         RSAEncryptionAndDecryption encryptionAndDecryption = new RSAEncryptionAndDecryption();
-        encryptionAndDecryption.loadPubkeyFromFile("D:\\Workspace\\test-all-in-one\\encryption\\src\\main\\resources\\rsapubkey.pem");
-        encryptionAndDecryption.loadPrivkeyFromFile("D:\\Workspace\\test-all-in-one\\encryption\\src\\main\\resources\\rsa_pkcs8.pem");
+        encryptionAndDecryption.loadPubkeyFromFile(
+            "D:\\Workspace\\test-all-in-one\\encryption\\src\\main\\resources\\rsapubkey.pem");
+        encryptionAndDecryption.loadPrivkeyFromFile(
+            "D:\\Workspace\\test-all-in-one\\encryption\\src\\main\\resources\\rsa_pkcs8.pem");
         //String srcStr = "这就是个测试";
         byte[] src = new byte[245];
 

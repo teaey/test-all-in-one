@@ -14,14 +14,16 @@ import java.io.IOException;
  * Date: 13-11-6 上午11:26
  */
 public class Generator extends ClassLoader {
-    public static void main(String[] args) throws IOException, IllegalAccessException, InstantiationException {
+    public static void main(String[] args)
+        throws IOException, IllegalAccessException, InstantiationException {
         ClassReader cr = new ClassReader("xiaofei/asm/modify/C");
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         ClassAdapter classAdapter = new AddTimeClassAdapter(cw);
         //使给定的访问者访问Java类的ClassReader
         cr.accept(classAdapter, ClassReader.SKIP_DEBUG);
         byte[] data = cw.toByteArray();
-        File file = new File("D:/projects/xiaofei/target/classes/xiaofei/asm/create/modify/C.class");
+        File file =
+            new File("D:/projects/xiaofei/target/classes/xiaofei/asm/create/modify/C.class");
         FileOutputStream fout = new FileOutputStream(file);
         fout.write(data);
         fout.close();

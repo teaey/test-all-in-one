@@ -11,26 +11,46 @@ import java.lang.reflect.Method;
  * @date 13-12-26
  */
 public class UnsafeTest {
+    static short swap(short x) {
+        return (short) ((x << 8) | ((x >> 8) & 0xff));
+    }
+
+    static int swap(int x) {
+        return (int) ((swap((short) x) << 16) |
+            (swap((short) (x >> 16)) & 0xffff));
+    }
+
+    static short swap1(short x) {
+        return (short) ((x << 8) | (x >>> 8));
+    }
+
+    static int swap1(int x) {
+        return (int) ((swap((short) x) << 16) |
+            (swap((short) (x >>> 16))));
+    }
+
     @Test
-    public void testBits() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void testBits()
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+        IllegalAccessException {
         Method swapInt = Class.forName("java.nio.Bits").getDeclaredMethod("swap", Integer.TYPE);
         swapInt.setAccessible(true);
         Method swapShort = Class.forName("java.nio.Bits").getDeclaredMethod("swap", Integer.TYPE);
         swapShort.setAccessible(true);
 
-//        int x1 = Integer.MIN_VALUE;
-//        System.out.println(Integer.toBinaryString(x1));
-//        System.out.println(Integer.toBinaryString((x1 >> 8)));
+        //        int x1 = Integer.MIN_VALUE;
+        //        System.out.println(Integer.toBinaryString(x1));
+        //        System.out.println(Integer.toBinaryString((x1 >> 8)));
         int s1 = -32;
         System.out.println((short) s1 << 8);
         System.out.println(Integer.toBinaryString(-32));
         int x1 = Short.MIN_VALUE;
         System.out.println(Integer.valueOf("1110000011111111", 2));
-//        System.out.println(Integer.toBinaryString(x1));
-//        System.out.println(Integer.toBinaryString(x1 >>> 16));
+        //        System.out.println(Integer.toBinaryString(x1));
+        //        System.out.println(Integer.toBinaryString(x1 >>> 16));
         for (short i = Short.MIN_VALUE / 1000; i <= Short.MAX_VALUE / 1000; i++) {
-//            System.out.println(Integer.toBinaryString(i));
-//            System.out.println(Integer.toBinaryString(i >>> 16));
+            //            System.out.println(Integer.toBinaryString(i));
+            //            System.out.println(Integer.toBinaryString(i >>> 16));
             short i1 = swap(i);
             short i2 = swap1(i);
             if (i1 != i2) {
@@ -78,24 +98,6 @@ public class UnsafeTest {
         Object o2 = null;
         UnsafeAccessor.get().putObject(o2, 0, o);
         System.out.println(o == o2);
-    }
-
-    static short swap(short x) {
-        return (short) ((x << 8) | ((x >> 8) & 0xff));
-    }
-
-    static int swap(int x) {
-        return (int) ((swap((short) x) << 16) |
-                (swap((short) (x >> 16)) & 0xffff));
-    }
-
-    static short swap1(short x) {
-        return (short) ((x << 8) | (x >>> 8));
-    }
-
-    static int swap1(int x) {
-        return (int) ((swap((short) x) << 16) |
-                (swap((short) (x >>> 16))));
     }
 
 }

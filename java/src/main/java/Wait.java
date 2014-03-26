@@ -7,6 +7,7 @@ import java.io.IOException;
  */
 public class Wait {
     public static void main(String[] args) throws InterruptedException, IOException {
-        sun.misc.SharedSecrets.getJavaLangAccess().blockedOn(Thread.currentThread(), (Interruptible) new Object());
+        sun.misc.SharedSecrets.getJavaLangAccess()
+            .blockedOn(Thread.currentThread(), (Interruptible) new Object());
     }
 }

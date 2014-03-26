@@ -11,7 +11,7 @@ import java.net.Socket;
 public class OIOClient {
     public static void main(String[] args) throws IOException {
         Socket s = new Socket("10.68.172.34", 8889);
-//        Socket s = new Socket("localhost", 8888);
+        //        Socket s = new Socket("localhost", 8888);
         InputStreamReader in = new InputStreamReader(System.in);
         BufferedReader bi = new BufferedReader(in);
         for (; ; ) {

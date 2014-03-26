@@ -8,6 +8,22 @@ import java.net.Socket;
  * @author xiaofei.wxf
  */
 public class OIOServer {
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(8888);
+        System.out.println("服务器启动，监听端口：" + 8888);
+        while (true) {
+            try {
+                Socket s = serverSocket.accept();
+                s.setTcpNoDelay(true);
+                new Thread(new Reader(s)).start();
+                System.out.println("新连接");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     static class Reader implements Runnable {
         private Socket socket;
 
@@ -40,21 +56,6 @@ public class OIOServer {
                     System.out.println("断开连接:" + socket);
                     return;
                 }
-            }
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(8888);
-        System.out.println("服务器启动，监听端口：" + 8888);
-        while (true) {
-            try {
-                Socket s = serverSocket.accept();
-                s.setTcpNoDelay(true);
-                new Thread(new Reader(s)).start();
-                System.out.println("新连接");
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }

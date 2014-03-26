@@ -14,38 +14,39 @@ import java.util.concurrent.atomic.AtomicLong;
  * @date 13-12-31
  */
 public abstract class JavassistProxy {
-    private static final AtomicLong PROXY_CLASS_COUNTER = new AtomicLong(0);
-
-    private static final String PACKAGE_NAME = JavassistProxy.class.getPackage().getName();
-
     public static final InvocationHandler RETURN_NULL_INVOKER = new InvocationHandler() {
         public Object invoke(Object proxy, Method method, Object[] args) {
             return null;
         }
     };
-
     public static final InvocationHandler THROW_UNSUPPORTED_INVOKER = new InvocationHandler() {
         public Object invoke(Object proxy, Method method, Object[] args) {
-            throw new UnsupportedOperationException("Method [" + ReflectUtils.getName(method) + "] unimplemented.");
+            throw new UnsupportedOperationException(
+                "Method [" + ReflectUtils.getName(method) + "] unimplemented.");
         }
     };
-
-    private static final Map<ClassLoader, Map<String, Object>> ProxyCacheMap = new WeakHashMap<ClassLoader, Map<String, Object>>();
+    private static final AtomicLong PROXY_CLASS_COUNTER = new AtomicLong(0);
+    private static final String PACKAGE_NAME = JavassistProxy.class.getPackage().getName();
+    private static final Map<ClassLoader, Map<String, Object>> ProxyCacheMap =
+        new WeakHashMap<ClassLoader, Map<String, Object>>();
 
     private static final Object PendingGenerationMarker = new Object();
 
+    protected JavassistProxy() {
+    }
+
     /**
      * Get proxy.
+     * <p/>
+     * class loader.
      *
-     *            class loader.
-     * @param ics
-     *            interface class array.
-     *
+     * @param ics interface class array.
      * @return Proxy instance.
      */
     public static JavassistProxy getProxy(Class<?>... ics) {
-        if (ics.length > 65535 || ics.length < 1)
+        if (ics.length > 65535 || ics.length < 1) {
             throw new IllegalArgumentException("interface limit exceeded and more than 0");
+        }
 
         ClassLoader cl = JavassistProxy.class.getClassLoader();
         ClassLoader appClassLoader = ics[0].getClassLoader();
@@ -53,8 +54,9 @@ public abstract class JavassistProxy {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ics.length; i++) {
             String itf = ics[i].getName();
-            if (!ics[i].isInterface())
+            if (!ics[i].isInterface()) {
                 throw new RuntimeException(itf + " is not a interface.");
+            }
 
             Class<?> tmp = null;
             try {
@@ -62,8 +64,9 @@ public abstract class JavassistProxy {
             } catch (ClassNotFoundException e) {
             }
 
-            if (tmp != ics[i])
+            if (tmp != ics[i]) {
                 throw new IllegalArgumentException(ics[i] + " is not visible from class loader");
+            }
 
             sb.append(itf).append(';');
         }
@@ -87,8 +90,9 @@ public abstract class JavassistProxy {
                 Object value = cache.get(key);
                 if (value instanceof Reference<?>) {
                     proxy = (JavassistProxy) ((Reference<?>) value).get();
-                    if (proxy != null)
+                    if (proxy != null) {
                         return proxy;
+                    }
                 }
 
                 if (value == PendingGenerationMarker) {
@@ -118,46 +122,56 @@ public abstract class JavassistProxy {
                     if (pkg == null) {
                         pkg = npkg;
                     } else {
-                        if (!pkg.equals(npkg))
-                            throw new IllegalArgumentException("non-public interfaces from different packages");
+                        if (!pkg.equals(npkg)) {
+                            throw new IllegalArgumentException(
+                                "non-public interfaces from different packages");
+                        }
                     }
                 }
                 ccp.addInterface(ics[i]);
 
                 for (Method method : ics[i].getMethods()) {
                     String desc = ReflectUtils.getDesc(method);
-                    if (worked.contains(desc))
+                    if (worked.contains(desc)) {
                         continue;
+                    }
                     worked.add(desc);
 
                     int ix = methods.size();
                     Class<?> rt = method.getReturnType();
                     Class<?>[] pts = method.getParameterTypes();
 
-                    StringBuilder code = new StringBuilder("Object[] args = new Object[").append(pts.length).append(
+                    StringBuilder code =
+                        new StringBuilder("Object[] args = new Object[").append(pts.length).append(
                             "];");
-                    for (int j = 0; j < pts.length; j++)
-                        code.append(" args[").append(j).append("] = ($w)$").append(j + 1).append(";");
+                    for (int j = 0; j < pts.length; j++) {
+                        code.append(" args[").append(j).append("] = ($w)$").append(j + 1)
+                            .append(";");
+                    }
                     code.append(" Object ret = handler.invoke(this, methods[" + ix + "], args);");
-                    if (!Void.TYPE.equals(rt))
+                    if (!Void.TYPE.equals(rt)) {
                         code.append(" return ").append(asArgument(rt, "ret")).append(";");
+                    }
 
                     methods.add(method);
-                    ccp.addMethod(method.getName(), method.getModifiers(), rt, pts, method.getExceptionTypes(),
-                            code.toString());
+                    ccp.addMethod(method.getName(), method.getModifiers(), rt, pts,
+                        method.getExceptionTypes(),
+                        code.toString());
                 }
             }
 
-            if (pkg == null)
+            if (pkg == null) {
                 pkg = PACKAGE_NAME;
+            }
 
             // create ProxyInstance class.
             String pcn = pkg + ".proxy" + id;
             ccp.setClassName(pcn);
             ccp.addField("public static java.lang.reflect.Method[] methods;");
             ccp.addField("private " + InvocationHandler.class.getName() + " handler;");
-            ccp.addConstructor(Modifier.PUBLIC, new Class<?>[] { InvocationHandler.class }, new Class<?>[0],
-                    "handler=$1;");
+            ccp.addConstructor(Modifier.PUBLIC, new Class<?>[] {InvocationHandler.class},
+                new Class<?>[0],
+                "handler=$1;");
             ccp.addDefaultConstructor();
             Class<?> clazz = ccp.toClass(appClassLoader, domain);
             clazz.getField("methods").set(null, methods.toArray(new Method[0]));
@@ -168,8 +182,9 @@ public abstract class JavassistProxy {
             ccm.setClassName(fcn);
             ccm.addDefaultConstructor();
             ccm.setSuperClass(JavassistProxy.class);
-            ccm.addMethod("public Object newInstance(" + InvocationHandler.class.getName() + " h){ return new " + pcn
-                    + "($1); }");
+            ccm.addMethod("public Object newInstance(" + InvocationHandler.class.getName()
+                + " h){ return new " + pcn
+                + "($1); }");
             Class<?> pc = ccm.toClass(appClassLoader, domain);
             proxy = (JavassistProxy) pc.newInstance();
         } catch (RuntimeException e) {
@@ -178,19 +193,53 @@ public abstract class JavassistProxy {
             throw new RuntimeException(e.getMessage(), e);
         } finally {
             // release ClassGenerator
-            if (ccp != null)
+            if (ccp != null) {
                 ccp.release();
-            if (ccm != null)
+            }
+            if (ccm != null) {
                 ccm.release();
+            }
             synchronized (cache) {
-                if (proxy == null)
+                if (proxy == null) {
                     cache.remove(key);
-                else
+                } else {
                     cache.put(key, new WeakReference<JavassistProxy>(proxy));
+                }
                 cache.notifyAll();
             }
         }
         return proxy;
+    }
+
+    private static String asArgument(Class<?> cl, String name) {
+        if (cl.isPrimitive()) {
+            if (Boolean.TYPE == cl) {
+                return name + "==null?false:((Boolean)" + name + ").booleanValue()";
+            }
+            if (Byte.TYPE == cl) {
+                return name + "==null?(byte)0:((Byte)" + name + ").byteValue()";
+            }
+            if (Character.TYPE == cl) {
+                return name + "==null?(char)0:((Character)" + name + ").charValue()";
+            }
+            if (Double.TYPE == cl) {
+                return name + "==null?(double)0:((Double)" + name + ").doubleValue()";
+            }
+            if (Float.TYPE == cl) {
+                return name + "==null?(float)0:((Float)" + name + ").floatValue()";
+            }
+            if (Integer.TYPE == cl) {
+                return name + "==null?(int)0:((Integer)" + name + ").intValue()";
+            }
+            if (Long.TYPE == cl) {
+                return name + "==null?(long)0:((Long)" + name + ").longValue()";
+            }
+            if (Short.TYPE == cl) {
+                return name + "==null?(short)0:((Short)" + name + ").shortValue()";
+            }
+            throw new RuntimeException(name + " is unknown primitive type.");
+        }
+        return "(" + ReflectUtils.getName(cl) + ")" + name;
     }
 
     /**
@@ -208,30 +257,4 @@ public abstract class JavassistProxy {
      * @return instance.
      */
     abstract public Object newInstance(InvocationHandler handler);
-
-    protected JavassistProxy() {
-    }
-
-    private static String asArgument(Class<?> cl, String name) {
-        if (cl.isPrimitive()) {
-            if (Boolean.TYPE == cl)
-                return name + "==null?false:((Boolean)" + name + ").booleanValue()";
-            if (Byte.TYPE == cl)
-                return name + "==null?(byte)0:((Byte)" + name + ").byteValue()";
-            if (Character.TYPE == cl)
-                return name + "==null?(char)0:((Character)" + name + ").charValue()";
-            if (Double.TYPE == cl)
-                return name + "==null?(double)0:((Double)" + name + ").doubleValue()";
-            if (Float.TYPE == cl)
-                return name + "==null?(float)0:((Float)" + name + ").floatValue()";
-            if (Integer.TYPE == cl)
-                return name + "==null?(int)0:((Integer)" + name + ").intValue()";
-            if (Long.TYPE == cl)
-                return name + "==null?(long)0:((Long)" + name + ").longValue()";
-            if (Short.TYPE == cl)
-                return name + "==null?(short)0:((Short)" + name + ").shortValue()";
-            throw new RuntimeException(name + " is unknown primitive type.");
-        }
-        return "(" + ReflectUtils.getName(cl) + ")" + name;
-    }
 }

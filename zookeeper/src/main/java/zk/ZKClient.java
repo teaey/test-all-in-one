@@ -16,6 +16,27 @@ public class ZKClient implements Watcher {
 
     private CountDownLatch connectedSemaphore = new CountDownLatch(1);
 
+    public static void main(String[] args) {
+
+        ZKClient sample = new ZKClient();
+        sample.createConnection(CONNECTION_STRING, SESSION_TIMEOUT);
+        if (sample.createPath(ZK_PATH, "我是节点初始内容")) {
+            System.out.println();
+            System.out.println("数据内容: " + sample.readData(ZK_PATH) + "\n");
+            sample.writeData(ZK_PATH, "更新后的数据");
+            System.out.println("数据内容: " + sample.readData(ZK_PATH) + "\n");
+        }
+        sample.deleteNode(ZK_PATH);
+        while (true) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        //sample.releaseConnection();
+    }
+
     /**
      * 创建ZK连接
      *
@@ -60,11 +81,11 @@ public class ZKClient implements Watcher {
     public boolean createPath(String path, String data) {
         try {
             System.out.println("节点创建成功, Path: "
-                    + this.zk.create(path, //
-                    data.getBytes(), //
-                    ZooDefs.Ids.OPEN_ACL_UNSAFE, //
-                    CreateMode.EPHEMERAL)
-                    + ", content: " + data);
+                + this.zk.create(path, //
+                data.getBytes(), //
+                ZooDefs.Ids.OPEN_ACL_UNSAFE, //
+                CreateMode.EPHEMERAL)
+                + ", content: " + data);
         } catch (KeeperException e) {
             System.out.println("节点创建失败，发生KeeperException");
             e.printStackTrace();
@@ -106,7 +127,7 @@ public class ZKClient implements Watcher {
     public boolean writeData(String path, String data) {
         try {
             System.out.println("更新数据成功，path：" + path + ", stat: " +
-                    this.zk.setData(path, data.getBytes(), -1));
+                this.zk.setData(path, data.getBytes(), -1));
         } catch (KeeperException e) {
             System.out.println("更新数据失败，发生KeeperException，path: " + path);
             e.printStackTrace();
@@ -133,27 +154,6 @@ public class ZKClient implements Watcher {
             System.out.println("删除节点失败，发生 InterruptedException，path: " + path);
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-
-        ZKClient sample = new ZKClient();
-        sample.createConnection(CONNECTION_STRING, SESSION_TIMEOUT);
-        if (sample.createPath(ZK_PATH, "我是节点初始内容")) {
-            System.out.println();
-            System.out.println("数据内容: " + sample.readData(ZK_PATH) + "\n");
-            sample.writeData(ZK_PATH, "更新后的数据");
-            System.out.println("数据内容: " + sample.readData(ZK_PATH) + "\n");
-        }
-        sample.deleteNode(ZK_PATH);
-        while(true){
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        //sample.releaseConnection();
     }
 
     /**
@@ -185,7 +185,7 @@ public class ZKClient implements Watcher {
      */
     @Override
     public void process(WatchedEvent event) {
-        switch (event.getType()){
+        switch (event.getType()) {
             case None:
                 //ignore
                 break;

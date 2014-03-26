@@ -18,11 +18,11 @@ public class App1 {
         HTreeMap<Object, Object> map = db.getHashMap("anger");
 
 
-        OO o = new OO(1,2,"3", new Date());
+        OO o = new OO(1, 2, "3", new Date());
         map.put(o, o);
-//        Object str = map.get("abc");
-//        Object inr = map.get(123);
-//        Object dat = map.get(d);
+        //        Object str = map.get("abc");
+        //        Object inr = map.get(123);
+        //        Object dat = map.get(d);
         Object oo = map.get(o);
         System.out.println(map.get(oo));
 

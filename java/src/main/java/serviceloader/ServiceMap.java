@@ -8,8 +8,9 @@ import java.util.ServiceLoader;
  */
 public class ServiceMap {
     public static void main(String[] args) {
-        Iterator<TestService> s = ServiceLoader.load(TestService.class, ServiceMap.class.getClassLoader()).iterator();
-        while(s.hasNext()){
+        Iterator<TestService> s =
+            ServiceLoader.load(TestService.class, ServiceMap.class.getClassLoader()).iterator();
+        while (s.hasNext()) {
             s.next().printV();
         }
     }

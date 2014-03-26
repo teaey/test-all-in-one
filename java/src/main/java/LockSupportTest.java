@@ -8,6 +8,14 @@ import java.lang.reflect.Field;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
+interface TestCallBack {
+
+    public void callback() throws Exception;
+
+    public String getName();
+}
+
+
 public class LockSupportTest {
 
     private static LockSupportTest blocker = new LockSupportTest();
@@ -181,7 +189,7 @@ public class LockSupportTest {
                         long start = System.currentTimeMillis();
                         call.callback();
                         System.out.println(call.getName() + " callback finish cost : "
-                                + (System.currentTimeMillis() - start));
+                            + (System.currentTimeMillis() - start));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -191,10 +199,3 @@ public class LockSupportTest {
         };
     }
 }
-
-interface TestCallBack {
-
-    public void callback() throws Exception;
-
-    public String getName();
-}  

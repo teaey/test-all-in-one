@@ -12,12 +12,14 @@ import java.io.IOException;
  * Date: 13-11-6 上午9:33
  */
 public class Sample extends ClassLoader {
-    public static void main(String[] args) throws IOException, IllegalAccessException, InstantiationException {
+    public static void main(String[] args)
+        throws IOException, IllegalAccessException, InstantiationException {
         ClassReader cr = new ClassReader("xiaofei/asm/modify/AopAo");
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         cr.accept(new AopClassAdaptor(cw), ClassReader.SKIP_DEBUG);
         byte[] classBytecode = cw.toByteArray();
-        FileOutputStream fos = new FileOutputStream("D:\\projects\\xiaofei\\target\\classes\\xiaofei\\asm\\create\\modify\\AopAo.class");
+        FileOutputStream fos = new FileOutputStream(
+            "D:\\projects\\xiaofei\\target\\classes\\xiaofei\\asm\\create\\modify\\AopAo.class");
         fos.write(classBytecode);
         fos.flush();
         fos.close();

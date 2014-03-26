@@ -29,16 +29,25 @@ import java.util.logging.Logger;
 public class DiscardClientHandler extends SimpleChannelInboundHandler<Object> {
 
     private static final Logger logger = Logger.getLogger(
-            DiscardClientHandler.class.getName());
+        DiscardClientHandler.class.getName());
 
     private final int messageSize;
+    private final ChannelFutureListener trafficGenerator = new ChannelFutureListener() {
+        @Override
+        public void operationComplete(ChannelFuture future) throws Exception {
+            if (future.isSuccess()) {
+                generateTraffic();
+            }
+        }
+    };
+    long counter;
     private ByteBuf content;
     private ChannelHandlerContext ctx;
 
     public DiscardClientHandler(int messageSize) {
         if (messageSize <= 0) {
             throw new IllegalArgumentException(
-                    "messageSize: " + messageSize);
+                "messageSize: " + messageSize);
         }
         this.messageSize = messageSize;
     }
@@ -55,16 +64,14 @@ public class DiscardClientHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx,
-            Throwable cause) throws Exception {
+        Throwable cause) throws Exception {
         // Close the connection when an exception is raised.
         logger.log(
-                Level.WARNING,
-                "Unexpected exception from downstream.",
-                cause);
+            Level.WARNING,
+            "Unexpected exception from downstream.",
+            cause);
         ctx.close();
     }
-
-    long counter;
 
     private void generateTraffic() {
         // Flush the outbound buffer to the socket.
@@ -72,17 +79,9 @@ public class DiscardClientHandler extends SimpleChannelInboundHandler<Object> {
         ctx.writeAndFlush(content.duplicate().retain()).addListener(trafficGenerator);
     }
 
-    private final ChannelFutureListener trafficGenerator = new ChannelFutureListener() {
-        @Override
-        public void operationComplete(ChannelFuture future) throws Exception {
-            if (future.isSuccess()) {
-                generateTraffic();
-            }
-        }
-    };
-
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o)
+        throws Exception {
 
     }
 }

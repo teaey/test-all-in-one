@@ -16,7 +16,7 @@ public class AddTimeClassAdapter extends ClassAdapter {
 
     @Override
     public void visit(int version, int access, String name, String signature,
-                      String superName, String[] interfaces) {
+        String superName, String[] interfaces) {
         cv.visit(version, access, name, signature, superName, interfaces);
         owner = name;
         isInterface = (access & Opcodes.ACC_INTERFACE) != 0;
@@ -24,7 +24,7 @@ public class AddTimeClassAdapter extends ClassAdapter {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc,
-                                     String signature, String[] exceptions) {
+        String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
         if (!name.equals("<init>") && !isInterface && mv != null) {
             //为方法添加计时功能
@@ -37,7 +37,8 @@ public class AddTimeClassAdapter extends ClassAdapter {
     public void visitEnd() {
         //添加字段
         if (!isInterface) {
-            FieldVisitor fv = cv.visitField(Opcodes.ACC_PUBLIC + Opcodes.ACC_STATIC, "timer", "J", null, null);
+            FieldVisitor fv =
+                cv.visitField(Opcodes.ACC_PUBLIC + Opcodes.ACC_STATIC, "timer", "J", null, null);
             if (fv != null) {
                 fv.visitEnd();
             }
@@ -54,16 +55,19 @@ public class AddTimeClassAdapter extends ClassAdapter {
         public void visitCode() {
             mv.visitCode();
             mv.visitFieldInsn(Opcodes.GETSTATIC, owner, "timer", "J");
-            mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J");
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis",
+                "()J");
             mv.visitInsn(Opcodes.LSUB);
             mv.visitFieldInsn(Opcodes.PUTSTATIC, owner, "timer", "J");
         }
 
         @Override
         public void visitInsn(int opcode) {
-            if ((opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) || opcode == Opcodes.ATHROW) {
+            if ((opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN)
+                || opcode == Opcodes.ATHROW) {
                 mv.visitFieldInsn(Opcodes.GETSTATIC, owner, "timer", "J");
-                mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J");
+                mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis",
+                    "()J");
                 mv.visitInsn(Opcodes.LADD);
                 mv.visitFieldInsn(Opcodes.PUTSTATIC, owner, "timer", "J");
             }

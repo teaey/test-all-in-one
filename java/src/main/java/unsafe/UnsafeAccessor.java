@@ -16,13 +16,14 @@ public class UnsafeAccessor {
 
     public static final Unsafe getUnsafe() {
         try {
-            final PrivilegedExceptionAction<Unsafe> action = new PrivilegedExceptionAction<Unsafe>() {
-                public Unsafe run() throws Exception {
-                    Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
-                    theUnsafe.setAccessible(true);
-                    return (Unsafe) theUnsafe.get(null);
-                }
-            };
+            final PrivilegedExceptionAction<Unsafe> action =
+                new PrivilegedExceptionAction<Unsafe>() {
+                    public Unsafe run() throws Exception {
+                        Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+                        theUnsafe.setAccessible(true);
+                        return (Unsafe) theUnsafe.get(null);
+                    }
+                };
             return AccessController.doPrivileged(action);
         } catch (Exception e) {
             throw new RuntimeException("Unable to load unsafe", e);

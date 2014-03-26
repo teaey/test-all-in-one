@@ -13,19 +13,25 @@ import org.slf4j.LoggerFactory;
 public class PbServices {
     private static final Logger log = LoggerFactory.getLogger(PbServices.class);
 
+
     public static class PbBlockingService implements PbDemoProto.LoginService.BlockingInterface {
         @Override
-        public PbDemoProto.Login_S2C login(RpcController controller, PbDemoProto.Login_C2S request) throws ServiceException {
+        public PbDemoProto.Login_S2C login(RpcController controller, PbDemoProto.Login_C2S request)
+            throws ServiceException {
             log.debug("<--- mName=login, request={}", request);
-            return PbDemoProto.Login_S2C.newBuilder().setTimestamp(System.currentTimeMillis()).build();
+            return PbDemoProto.Login_S2C.newBuilder().setTimestamp(System.currentTimeMillis())
+                .build();
         }
     }
 
-    public static class PbService implements PbDemoProto.LoginService.Interface{
+
+    public static class PbService implements PbDemoProto.LoginService.Interface {
 
         @Override
-        public void login(RpcController controller, PbDemoProto.Login_C2S request, RpcCallback<PbDemoProto.Login_S2C> done) {
-            done.run(PbDemoProto.Login_S2C.newBuilder().setTimestamp(System.currentTimeMillis()).build());
+        public void login(RpcController controller, PbDemoProto.Login_C2S request,
+            RpcCallback<PbDemoProto.Login_S2C> done) {
+            done.run(PbDemoProto.Login_S2C.newBuilder().setTimestamp(System.currentTimeMillis())
+                .build());
         }
     }
 }

@@ -15,6 +15,11 @@ public abstract class InterruptSupport implements InterruptAble {
         }
     };
 
+    // -- sun.misc.SharedSecrets --
+    static void blockedOn(Interruptible intr) { // package-private
+        sun.misc.SharedSecrets.getJavaLangAccess().blockedOn(Thread.currentThread(), intr);
+    }
+
     public final boolean execute() throws InterruptedException {
         try {
             blockedOn(interruptor); // 位置1
@@ -35,9 +40,4 @@ public abstract class InterruptSupport implements InterruptAble {
     public abstract void bussiness();
 
     public abstract void interrupt(Thread thread);
-
-    // -- sun.misc.SharedSecrets --
-    static void blockedOn(Interruptible intr) { // package-private
-        sun.misc.SharedSecrets.getJavaLangAccess().blockedOn(Thread.currentThread(), intr);
-    }
 }

@@ -19,7 +19,8 @@ public class MemoryMapReader {
      * @throws FileNotFoundException
      * @throws InterruptedException
      */
-    public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException {
+    public static void main(String[] args)
+        throws FileNotFoundException, IOException, InterruptedException {
 
 
         FileChannel fc = new RandomAccessFile(new File("D:/mapped.txt"), "rw").getChannel();
@@ -47,7 +48,8 @@ public class MemoryMapReader {
             } else {
                 long end = System.currentTimeMillis();
                 long tot = end - startTime;
-                System.out.println(String.format("Last Value Read %s , Time(ms) %s ", lastValue, tot));
+                System.out
+                    .println(String.format("Last Value Read %s , Time(ms) %s ", lastValue, tot));
                 System.out.println("Waiting for message");
                 while (true) {
                     long newSize = fc.size();
