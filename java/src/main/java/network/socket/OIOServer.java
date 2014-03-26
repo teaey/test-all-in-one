@@ -15,10 +15,10 @@ public class OIOServer {
             try {
                 Socket s = serverSocket.accept();
                 s.setTcpNoDelay(true);
-                new Thread(new Reader(s)).start();
+                //new Thread(new Reader(s)).start();
                 System.out.println("新连接");
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println(e.getMessage());
             }
         }
     }

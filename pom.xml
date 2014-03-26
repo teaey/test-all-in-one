@@ -20,6 +20,8 @@
         <module>mapdb</module>
         <module>Qrcode</module>
         <module>encryption</module>
+        <module>oauth2</module>
+        <module>kryo</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
