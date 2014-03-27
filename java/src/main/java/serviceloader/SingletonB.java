@@ -6,6 +6,6 @@ package serviceloader;
 public class SingletonB {
     private SingletonB(){}
     static final SingletonB b = new SingletonB();
-    static final SingletonA a = SingletonA.a;
 
+    final SingletonA a = SingletonA.a;
 }

@@ -11,7 +11,7 @@ public class Singleton {
         SingletonA a1 = SingletonB.b.a;
         SingletonB b1 = SingletonA.a.b;
 
-        System.out.println(b == SingletonA.a.b);
-        System.out.println(a == SingletonB.b.a);
+        System.out.println(a == a1);
+        System.out.println(b == b1);
     }
 }
