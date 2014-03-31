@@ -1,4 +1,4 @@
-package serviceloader;
+package serviceloader.singleton;
 
 /**
  * @author xiaofei.wxf
@@ -6,6 +6,8 @@ package serviceloader;
 public class SingletonB {
     private SingletonB(){}
     static final SingletonB b = new SingletonB();
-
-    final SingletonA a = SingletonA.a;
+    static{
+        b.a = SingletonA.a;
+    }
+    SingletonA a;
 }

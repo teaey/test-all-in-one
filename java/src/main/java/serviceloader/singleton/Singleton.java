@@ -1,4 +1,4 @@
-package serviceloader;
+package serviceloader.singleton;
 
 /**
  * @author xiaofei.wxf

@@ -25,13 +25,13 @@ public class ServiceMap {
     }
 
     public static void main(String[] args) {
-//        ServiceA a = get(ServiceA.class);
-//        ServiceB b = get(ServiceB.class);
-//        System.out.println(a.getB() == b);
-//        System.out.println(b.getA() == a);
-//
-//        a.printA();
-//        b.printB();
+        ServiceA a = get(ServiceA.class);
+        ServiceB b = get(ServiceB.class);
+        System.out.println(a.getB() == b);
+        System.out.println(b.getA() == a);
+
+        a.printA();
+        b.printB();
 
 
     }
