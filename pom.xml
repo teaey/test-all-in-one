@@ -16,11 +16,9 @@
         <module>code4fun3</module>
         <module>java</module>
         <module>zookeeper</module>
-        <module>mashape</module>
         <module>mapdb</module>
         <module>Qrcode</module>
         <module>encryption</module>
-        <module>oauth2</module>
         <module>kryo</module>
     </modules>
     <properties>
