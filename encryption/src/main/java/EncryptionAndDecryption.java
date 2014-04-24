@@ -1,5 +1,3 @@
-package encrypt;
-
 /**
  * @author xiaofei.wxf
  */

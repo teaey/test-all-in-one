@@ -1,5 +1,3 @@
-package encrypt;
-
 import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
