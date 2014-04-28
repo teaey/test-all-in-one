@@ -16,12 +16,10 @@
         <module>code4fun3</module>
         <module>java</module>
         <module>zookeeper</module>
-        <module>mapdb</module>
         <module>Qrcode</module>
         <module>encryption</module>
         <module>kryo</module>
         <module>hash-function-argorithms</module>
-        <module>mongodb</module>
         <module>typesafe-config</module>
     </modules>
     <properties>
