@@ -15,7 +15,8 @@ public class OIOServer {
             try {
                 Socket s = serverSocket.accept();
                 s.setTcpNoDelay(true);
-                //new Thread(new Reader(s)).start();
+                s.setSoLinger(true, 2);
+                new Thread(new Reader(s)).start();
                 System.out.println("新连接");
             } catch (Exception e) {
                 System.err.println(e.getMessage());
@@ -33,29 +34,27 @@ public class OIOServer {
 
         @Override
         public void run() {
-            for (; ; ) {
+            try {
+                Thread.sleep(1000);
+                socket.close();
+                //                    int data = socket.getInputStream().read();
+                //                    if (-1 == data) {
+                //                        socket.close();
+                //                        System.out.println("断开连接:" + socket);
+                //                        return;
+                //                    }
+                //                    socket.getOutputStream().write(data);
+                //                    socket.getOutputStream().flush();
+                //                    System.out.println("Read:" + data + " Write:" + (data));
+            } catch (Throwable e) {
+                e.printStackTrace();
                 try {
-                    Thread.sleep(10000);
                     socket.close();
-                    int data = socket.getInputStream().read();
-                    if (-1 == data) {
-                        socket.close();
-                        System.out.println("断开连接:" + socket);
-                        return;
-                    }
-                    socket.getOutputStream().write(data);
-                    socket.getOutputStream().flush();
-                    System.out.println("Read:" + data + " Write:" + (data));
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                    try {
-                        socket.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                    System.out.println("断开连接:" + socket);
-                    return;
+                } catch (IOException e1) {
+                    e1.printStackTrace();
                 }
+                System.out.println("断开连接:" + socket);
+                return;
             }
         }
     }

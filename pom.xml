@@ -22,6 +22,9 @@
         <module>encryption</module>
         <module>oauth2</module>
         <module>kryo</module>
+        <module>hash-function-argorithms</module>
+        <module>mongodb</module>
+        <module>typesafe-config</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
