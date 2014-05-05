@@ -14,12 +14,9 @@ public class RandomUtil {
         int index = 0;
         int weightAdder = 0;
         for (Map.Entry<T, Integer> each : weightMap.entrySet()) {
-            if (each.getValue() == 0) {
-                continue;
-            }
             nodes[index] = each.getKey();
             weights[index++] = (weightAdder = weightAdder + each.getValue());
         }
-        return new WeightMeta<T>((T[]) Arrays.copyOf(nodes, index), Arrays.copyOf(weights, index));
+        return new WeightMeta<T>((T[]) nodes, weights);
     }
 }
