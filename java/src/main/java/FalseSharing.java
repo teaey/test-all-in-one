@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
  */
 public final class FalseSharing implements Runnable {
     public final static long ITERATIONS = 500L * 1000L * 1000L;
-    public static int NUM_THREADS = 8; // change
+    public static int NUM_THREADS = 2; // change
     private static VolatileLong[] longs;
     private final int arrayIndex;
 
@@ -52,7 +52,8 @@ public final class FalseSharing implements Runnable {
     }
 
     public final static class VolatileLong {
+        //public long q0, q1, q2, q3, q4, q5, q6; // 注释
         public volatile long value = 0L;
-        //public long p1, p2, p3, p4, p5, p6; // 注释
+        //public long p0, p1, p2, p3, p4, p5, p6; // 注释
     }
 }
