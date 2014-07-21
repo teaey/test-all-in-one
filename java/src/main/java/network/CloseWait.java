@@ -1,4 +1,4 @@
-package network.tcpstauts;
+package network;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -28,13 +28,12 @@ public class CloseWait {
                     Socket client;
                     while (null != (client = server.accept())) {
                         clients.add(client);
-                        client.setKeepAlive(true);
+                        //                        client.setKeepAlive(true);
                         printSockt("Server", client);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         };
         t.setDaemon(false);

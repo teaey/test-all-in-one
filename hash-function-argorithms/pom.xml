@@ -11,5 +11,11 @@
 
     <artifactId>hash-function-argorithms</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.6</version>
+        </dependency>
+    </dependencies>
 </project>

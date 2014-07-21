@@ -20,8 +20,9 @@
         <module>encryption</module>
         <module>kryo</module>
         <module>hash-function-argorithms</module>
-        <module>typesafe-config</module>
         <module>storm</module>
+        <module>commons-beanutils</module>
+        <module>jline</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
